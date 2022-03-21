@@ -16,8 +16,9 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 			Schema:      ConfigSchema,
 		},
 		TableMap: map[string]*plugin.Table{
-			"ovh_cloud_project": tableOvhCloudProject(),
-			"ovh_cloud_storage": tableOvhCloudStorage(),
+			"ovh_cloud_project":  tableOvhCloudProject(),
+			"ovh_cloud_storage":  tableOvhCloudStorage(),
+			"ovh_cloud_postgres": tableOvhCloudPostgres(),
 		},
 	}
 	return p
