@@ -17,6 +17,10 @@ func tableOvhCloudProject() *plugin.Table {
 		List: &plugin.ListConfig{
 			Hydrate: listProject,
 		},
+		Get: &plugin.GetConfig{
+			KeyColumns: plugin.SingleColumn("id"),
+			Hydrate:    getProject,
+		},
 		Columns: []*plugin.Column{
 			{Name: "id", Type: proto.ColumnType_STRING, Description: "Project id."},
 			{Name: "name", Type: proto.ColumnType_STRING, Description: "Project name."},
@@ -65,4 +69,19 @@ func listProject(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 		d.StreamListItem(ctx, project)
 	}
 	return nil, nil
+}
+
+func getProject(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	client, err := connect(ctx, d)
+	if err != nil {
+		return nil, err
+	}
+	quals := d.KeyColumnQuals
+	projectId := quals["id"].GetStringValue()
+	var project Project
+	err = client.Get(fmt.Sprintf("/cloud/project/%s", projectId), &project)
+	if err != nil {
+		return nil, err
+	}
+	return project, nil
 }

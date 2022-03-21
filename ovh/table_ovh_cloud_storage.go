@@ -17,6 +17,10 @@ func tableOvhCloudStorage() *plugin.Table {
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listStorageContainer,
 		},
+		Get: &plugin.GetConfig{
+			KeyColumns: plugin.AllColumns([]string{"project_id", "id"}),
+			Hydrate:    getStorageContainer,
+		},
 		Columns: []*plugin.Column{
 			{Name: "project_id", Type: proto.ColumnType_STRING, Transform: transform.FromQual("project_id"), Description: "Project id."},
 			{Name: "id", Type: proto.ColumnType_STRING, Description: "Container id."},
@@ -51,4 +55,20 @@ func listStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.Hy
 		d.StreamListItem(ctx, container)
 	}
 	return nil, nil
+}
+
+func getStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
+	client, err := connect(ctx, d)
+	if err != nil {
+		return nil, err
+	}
+	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	id := d.KeyColumnQuals["id"].GetStringValue()
+	var container StorageContainer
+	err = client.Get(fmt.Sprintf("/cloud/project/%s/storage/%s", projectId, id), &container)
+	if err != nil {
+		return nil, err
+	}
+	container.ID = id
+	return container, nil
 }
