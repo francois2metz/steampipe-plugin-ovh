@@ -21,17 +21,20 @@ func tableOvhCloudProject() *plugin.Table {
 			KeyColumns: plugin.SingleColumn("id"),
 			Hydrate:    getProject,
 		},
+		HydrateDependencies: []plugin.HydrateDependencies{
+			{Func: getProjectInfo},
+		},
 		Columns: []*plugin.Column{
 			{Name: "id", Type: proto.ColumnType_STRING, Description: "Project id."},
-			{Name: "name", Type: proto.ColumnType_STRING, Description: "Project name."},
-			{Name: "description", Type: proto.ColumnType_STRING, Description: "Project description."},
-			{Name: "plan_code", Type: proto.ColumnType_STRING, Description: "Order plan code."},
-			{Name: "order_id", Type: proto.ColumnType_STRING, Description: "Project order id."},
-			{Name: "status", Type: proto.ColumnType_STRING, Description: "Project status (creating, deleted, deleting, ok, suspended)"},
-			{Name: "unleash", Type: proto.ColumnType_BOOL, Description: "Project unleashed."},
-			{Name: "manual_quota", Type: proto.ColumnType_BOOL, Description: "Manual quota prevent automatic quota upgrade."},
-			{Name: "expiration_at", Type: proto.ColumnType_DATETIME, Transform: transform.FromField("Expiration"), Description: "Expiration date of your project. After this date, your project will be deleted."},
-			{Name: "created_at", Type: proto.ColumnType_DATETIME, Transform: transform.FromField("CreationDate"), Description: "Project creation date."},
+			{Name: "name", Hydrate: getProjectInfo, Type: proto.ColumnType_STRING, Description: "Project name."},
+			{Name: "description", Hydrate: getProjectInfo, Type: proto.ColumnType_STRING, Description: "Project description."},
+			{Name: "plan_code", Hydrate: getProjectInfo, Type: proto.ColumnType_STRING, Description: "Order plan code."},
+			{Name: "order_id", Hydrate: getProjectInfo, Type: proto.ColumnType_STRING, Description: "Project order id."},
+			{Name: "status", Hydrate: getProjectInfo, Type: proto.ColumnType_STRING, Description: "Project status (creating, deleted, deleting, ok, suspended)"},
+			{Name: "unleash", Hydrate: getProjectInfo, Type: proto.ColumnType_BOOL, Description: "Project unleashed."},
+			{Name: "manual_quota", Hydrate: getProjectInfo, Type: proto.ColumnType_BOOL, Description: "Manual quota prevent automatic quota upgrade."},
+			{Name: "expiration_at", Hydrate: getProjectInfo, Type: proto.ColumnType_DATETIME, Transform: transform.FromField("Expiration"), Description: "Expiration date of your project. After this date, your project will be deleted."},
+			{Name: "created_at", Hydrate: getProjectInfo, Type: proto.ColumnType_DATETIME, Transform: transform.FromField("CreationDate"), Description: "Project creation date."},
 		},
 	}
 }
@@ -50,6 +53,22 @@ type Project struct {
 	ManualQuota  *bool      `json:"manualQuota"`
 }
 
+func getProjectInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	plugin.Logger(ctx).Trace("getProjectInfo")
+	project := h.Item.(Project)
+
+	client, err := connect(ctx, d)
+	if err != nil {
+		return nil, err
+	}
+
+	err = client.Get(fmt.Sprintf("/cloud/project/%s", project.ID), &project)
+	if err != nil {
+		return nil, err
+	}
+	return project, nil
+}
+
 func listProject(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
@@ -62,26 +81,16 @@ func listProject(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 	}
 	for _, projectId := range projects {
 		var project Project
-		err = client.Get(fmt.Sprintf("/cloud/project/%s", projectId), &project)
-		if err != nil {
-			return nil, err
-		}
+		project.ID = projectId
 		d.StreamListItem(ctx, project)
 	}
 	return nil, nil
 }
 
 func getProject(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	client, err := connect(ctx, d)
-	if err != nil {
-		return nil, err
-	}
 	quals := d.KeyColumnQuals
 	projectId := quals["id"].GetStringValue()
 	var project Project
-	err = client.Get(fmt.Sprintf("/cloud/project/%s", projectId), &project)
-	if err != nil {
-		return nil, err
-	}
+	project.ID = projectId
 	return project, nil
 }
