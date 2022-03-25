@@ -22,12 +22,37 @@ func tableOvhCloudStorage() *plugin.Table {
 			Hydrate:    getStorageContainer,
 		},
 		Columns: []*plugin.Column{
-			{Name: "project_id", Type: proto.ColumnType_STRING, Transform: transform.FromQual("project_id"), Description: "Project id."},
-			{Name: "id", Type: proto.ColumnType_STRING, Description: "Container id."},
-			{Name: "name", Type: proto.ColumnType_STRING, Description: "Container name."},
-			{Name: "stored_objects", Type: proto.ColumnType_INT, Description: "Total objects stored."},
-			{Name: "stored_bytes", Type: proto.ColumnType_INT, Description: "Total bytes stored."},
-			{Name: "region", Type: proto.ColumnType_STRING, Description: "Region of the container."},
+			{
+				Name:        "project_id",
+				Type:        proto.ColumnType_STRING,
+				Transform:   transform.FromQual("project_id"),
+				Description: "Project id.",
+			},
+			{
+				Name:        "id",
+				Type:        proto.ColumnType_STRING,
+				Description: "Container id.",
+			},
+			{
+				Name:        "name",
+				Type:        proto.ColumnType_STRING,
+				Description: "Container name.",
+			},
+			{
+				Name:        "stored_objects",
+				Type:        proto.ColumnType_INT,
+				Description: "Total objects stored.",
+			},
+			{
+				Name:        "stored_bytes",
+				Type:        proto.ColumnType_INT,
+				Description: "Total bytes stored.",
+			},
+			{
+				Name:        "region",
+				Type:        proto.ColumnType_STRING,
+				Description: "Region of the container.",
+			},
 		},
 	}
 }

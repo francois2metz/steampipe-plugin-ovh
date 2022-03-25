@@ -26,19 +26,74 @@ func tableOvhCloudPostgres() *plugin.Table {
 			{Func: getProjectInfo},
 		},
 		Columns: []*plugin.Column{
-			{Name: "project_id", Type: proto.ColumnType_STRING, Transform: transform.FromQual("project_id"), Description: "Project id."},
-			{Name: "id", Type: proto.ColumnType_STRING, Description: "Service id."},
-			{Name: "engine", Hydrate: getPostgresInfo, Type: proto.ColumnType_STRING, Description: "Name of the engine of the service."},
-			{Name: "plan", Hydrate: getPostgresInfo, Type: proto.ColumnType_STRING, Description: "Plan of the cluster."},
-			{Name: "created_at", Hydrate: getPostgresInfo, Type: proto.ColumnType_DATETIME, Description: "Date of the creation of the cluster."},
-			{Name: "status", Hydrate: getPostgresInfo, Type: proto.ColumnType_STRING, Description: "Current status of the cluster."},
-			{Name: "node_number", Hydrate: getPostgresInfo, Type: proto.ColumnType_STRING, Description: "Number of nodes in the cluster."},
-			{Name: "description", Hydrate: getPostgresInfo, Type: proto.ColumnType_STRING, Description: "Description of the cluster."},
-			{Name: "version", Hydrate: getPostgresInfo, Type: proto.ColumnType_STRING, Description: "Version of the engine deployed on the cluster."},
-			{Name: "network_type", Hydrate: getPostgresInfo, Type: proto.ColumnType_STRING, Description: "Type of network of the cluster."},
-			{Name: "flavor", Hydrate: getPostgresInfo, Type: proto.ColumnType_STRING, Description: "The VM flavor used for this cluster."},
+			{
+				Name:        "project_id",
+				Type:        proto.ColumnType_STRING,
+				Transform:   transform.FromQual("project_id"),
+				Description: "Project id.",
+			},
+			{
+				Name:        "id",
+				Type:        proto.ColumnType_STRING,
+				Description: "Service id.",
+			},
+			{
+				Name:        "engine",
+				Hydrate:     getPostgresInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Name of the engine of the service.",
+			},
+			{
+				Name:        "plan",
+				Hydrate:     getPostgresInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Plan of the cluster.",
+			},
+			{
+				Name:        "created_at",
+				Hydrate:     getPostgresInfo,
+				Type:        proto.ColumnType_DATETIME,
+				Description: "Date of the creation of the cluster.",
+			},
+			{
+				Name:        "status",
+				Hydrate:     getPostgresInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Current status of the cluster.",
+			},
+			{
+				Name:        "node_number",
+				Hydrate:     getPostgresInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Number of nodes in the cluster.",
+			},
+			{
+				Name:        "description",
+				Hydrate:     getPostgresInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Description of the cluster.",
+			},
+			{
+				Name:        "version",
+				Hydrate:     getPostgresInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Version of the engine deployed on the cluster.",
+			},
+			{
+				Name:        "network_type",
+				Hydrate:     getPostgresInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Type of network of the cluster.",
+			},
+			{
+				Name:        "flavor",
+				Hydrate:     getPostgresInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "The VM flavor used for this cluster.",
+			},
 		},
 	}
+
 }
 
 type MaintenanceWindow struct {

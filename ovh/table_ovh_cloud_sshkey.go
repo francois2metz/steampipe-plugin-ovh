@@ -22,10 +22,27 @@ func tableOvhCloudSshkey() *plugin.Table {
 			Hydrate:    getSshkey,
 		},
 		Columns: []*plugin.Column{
-			{Name: "project_id", Type: proto.ColumnType_STRING, Transform: transform.FromQual("project_id"), Description: "Project id."},
-			{Name: "id", Type: proto.ColumnType_STRING, Description: "SSH Key id."},
-			{Name: "name", Type: proto.ColumnType_STRING, Description: "SSH Key name."},
-			{Name: "public_key", Type: proto.ColumnType_STRING, Description: "SSH public key."},
+			{
+				Name:        "project_id",
+				Type:        proto.ColumnType_STRING,
+				Transform:   transform.FromQual("project_id"),
+				Description: "Project id.",
+			},
+			{
+				Name:        "id",
+				Type:        proto.ColumnType_STRING,
+				Description: "SSH Key id.",
+			},
+			{
+				Name:        "name",
+				Type:        proto.ColumnType_STRING,
+				Description: "SSH Key name.",
+			},
+			{
+				Name:        "public_key",
+				Type:        proto.ColumnType_STRING,
+				Description: "SSH public key.",
+			},
 		},
 	}
 }

@@ -23,17 +23,63 @@ func tableOvhCloudInstance() *plugin.Table {
 			Hydrate:    getInstance,
 		},
 		Columns: []*plugin.Column{
-			{Name: "project_id", Type: proto.ColumnType_STRING, Transform: transform.FromQual("project_id"), Description: "Project id."},
-			{Name: "id", Type: proto.ColumnType_STRING, Description: "Instance id."},
-			{Name: "name", Type: proto.ColumnType_STRING, Description: "Instance name."},
-			{Name: "flavor_id", Type: proto.ColumnType_STRING, Description: "Instance flavor id."},
-			{Name: "image_id", Type: proto.ColumnType_STRING, Description: "Instance image id."},
-			{Name: "ssh_key_id", Type: proto.ColumnType_STRING, Description: "Instance ssh key id."},
-			{Name: "created_at", Type: proto.ColumnType_DATETIME, Description: "Instance creation date.", Transform: transform.FromField("Created")},
-			{Name: "region", Type: proto.ColumnType_STRING, Description: "Region of the instance."},
-			{Name: "status", Type: proto.ColumnType_STRING, Description: "Instance status."},
-			{Name: "plan_code", Type: proto.ColumnType_STRING, Description: "Order plan code."},
-			{Name: "current_month_outgoing_traffic", Type: proto.ColumnType_INT, Description: "Instance outgoing network traffic for the current month (in bytes)."},
+			{
+				Name:        "project_id",
+				Type:        proto.ColumnType_STRING,
+				Transform:   transform.FromQual("project_id"),
+				Description: "Project id.",
+			},
+			{
+				Name:        "id",
+				Type:        proto.ColumnType_STRING,
+				Description: "Instance id.",
+			},
+			{
+				Name:        "name",
+				Type:        proto.ColumnType_STRING,
+				Description: "Instance name.",
+			},
+			{
+				Name:        "flavor_id",
+				Type:        proto.ColumnType_STRING,
+				Description: "Instance flavor id.",
+			},
+			{
+				Name:        "image_id",
+				Type:        proto.ColumnType_STRING,
+				Description: "Instance image id.",
+			},
+			{
+				Name:        "ssh_key_id",
+				Type:        proto.ColumnType_STRING,
+				Description: "Instance ssh key id.",
+			},
+			{
+				Name:        "created_at",
+				Type:        proto.ColumnType_DATETIME,
+				Description: "Instance creation date.",
+				Transform:   transform.FromField("Created"),
+			},
+			{
+				Name:        "region",
+				Type:        proto.ColumnType_STRING,
+				Description: "Region of the instance.",
+			},
+			{
+				Name:        "status",
+				Type:        proto.ColumnType_STRING,
+				Description: "Instance status.",
+			},
+			{
+				Name:        "plan_code",
+				Type:        proto.ColumnType_STRING,
+				Description: "Order plan code.",
+			},
+			{
+				Name:        "current_month_outgoing_traffic",
+				Type:        proto.ColumnType_INT,
+				Description: "Instance outgoing network traffic for the current month (in bytes).",
+			},
 		},
 	}
 }
