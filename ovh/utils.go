@@ -9,7 +9,7 @@ import (
 )
 
 func connect(ctx context.Context, d *plugin.QueryData) (*ovh.Client, error) {
-	// get gandi client from cache
+	// get ovh client from cache
 	cacheKey := "ovh"
 	if cachedData, ok := d.ConnectionManager.Cache.Get(cacheKey); ok {
 		return cachedData.(*ovh.Client), nil
@@ -31,7 +31,7 @@ func connect(ctx context.Context, d *plugin.QueryData) (*ovh.Client, error) {
 		if ovhConfig.ConsumerKey != nil {
 			consumerKey = *ovhConfig.ConsumerKey
 		}
-		if ovhConfig.ApplicationKey != nil {
+		if ovhConfig.Endpoint != nil {
 			endpoint = *ovhConfig.Endpoint
 		}
 	}
