@@ -17,6 +17,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 		},
 		TableMap: map[string]*plugin.Table{
 			"ovh_cloud_data_job": tableOvhCloudDataJob(),
+			"ovh_cloud_flavor":   tableOvhCloudFlavor(),
 			"ovh_cloud_image":    tableOvhCloudImage(),
 			"ovh_cloud_instance": tableOvhCloudInstance(),
 			"ovh_cloud_postgres": tableOvhCloudPostgres(),
