@@ -52,7 +52,7 @@ func tableOvhCloudPostgres() *plugin.Table {
 			{
 				Name:        "created_at",
 				Hydrate:     getPostgresInfo,
-				Type:        proto.ColumnType_DATETIME,
+				Type:        proto.ColumnType_TIMESTAMP,
 				Description: "Date of the creation of the cluster.",
 			},
 			{

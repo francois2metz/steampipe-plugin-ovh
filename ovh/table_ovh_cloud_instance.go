@@ -56,7 +56,7 @@ func tableOvhCloudInstance() *plugin.Table {
 			},
 			{
 				Name:        "created_at",
-				Type:        proto.ColumnType_DATETIME,
+				Type:        proto.ColumnType_TIMESTAMP,
 				Description: "Instance creation date.",
 				Transform:   transform.FromField("Created"),
 			},

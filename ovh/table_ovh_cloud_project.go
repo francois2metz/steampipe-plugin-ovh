@@ -75,14 +75,14 @@ func tableOvhCloudProject() *plugin.Table {
 			{
 				Name:        "expiration_at",
 				Hydrate:     getProjectInfo,
-				Type:        proto.ColumnType_DATETIME,
+				Type:        proto.ColumnType_TIMESTAMP,
 				Transform:   transform.FromField("Expiration"),
 				Description: "Expiration date of your project. After this date, your project will be deleted.",
 			},
 			{
 				Name:        "created_at",
 				Hydrate:     getProjectInfo,
-				Type:        proto.ColumnType_DATETIME,
+				Type:        proto.ColumnType_TIMESTAMP,
 				Transform:   transform.FromField("CreationDate"),
 				Description: "Project creation date.",
 			},
