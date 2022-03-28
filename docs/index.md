@@ -3,7 +3,7 @@ organization: francois2metz
 category: ["public cloud"]
 brand_color: "#000e9c"
 display_name: "OVH"
-short_name: "OVH"
+short_name: "ovh"
 description: "Steampipe plugin for querying OVH."
 og_description: "Query OVH with SQL! Open source CLI. No DB required."
 icon_url: "/images/plugins/francois2metz/ovh.svg"
