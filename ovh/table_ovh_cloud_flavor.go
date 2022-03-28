@@ -26,12 +26,12 @@ func tableOvhCloudFlavor() *plugin.Table {
 				Name:        "project_id",
 				Type:        proto.ColumnType_STRING,
 				Transform:   transform.FromQual("project_id"),
-				Description: "Project id.",
+				Description: "Project ID.",
 			},
 			{
 				Name:        "id",
 				Type:        proto.ColumnType_STRING,
-				Description: "Flavor id.",
+				Description: "Flavor ID.",
 			},
 			{
 				Name:        "name",

@@ -27,12 +27,12 @@ func tableOvhCloudVolume() *plugin.Table {
 				Name:        "project_id",
 				Type:        proto.ColumnType_STRING,
 				Transform:   transform.FromQual("project_id"),
-				Description: "Project id.",
+				Description: "Project ID.",
 			},
 			{
 				Name:        "id",
 				Type:        proto.ColumnType_STRING,
-				Description: "Volume id.",
+				Description: "Volume ID.",
 			},
 			{
 				Name:        "name",
@@ -47,7 +47,7 @@ func tableOvhCloudVolume() *plugin.Table {
 			{
 				Name:        "attached_to",
 				Type:        proto.ColumnType_JSON,
-				Description: "Volume attached to instances id.",
+				Description: "Volume attached to instances ID.",
 			},
 			{
 				Name:        "created_at",

@@ -28,7 +28,7 @@ func tableOvhCloudProject() *plugin.Table {
 			{
 				Name:        "id",
 				Type:        proto.ColumnType_STRING,
-				Description: "Project id.",
+				Description: "Project ID.",
 			},
 			{
 				Name:        "name",
@@ -52,7 +52,7 @@ func tableOvhCloudProject() *plugin.Table {
 				Name:        "order_id",
 				Hydrate:     getProjectInfo,
 				Type:        proto.ColumnType_STRING,
-				Description: "Project order id.",
+				Description: "Project order ID.",
 			},
 			{
 				Name:        "status",

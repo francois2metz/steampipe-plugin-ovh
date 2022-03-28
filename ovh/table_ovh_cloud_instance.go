@@ -27,12 +27,12 @@ func tableOvhCloudInstance() *plugin.Table {
 				Name:        "project_id",
 				Type:        proto.ColumnType_STRING,
 				Transform:   transform.FromQual("project_id"),
-				Description: "Project id.",
+				Description: "Project ID.",
 			},
 			{
 				Name:        "id",
 				Type:        proto.ColumnType_STRING,
-				Description: "Instance id.",
+				Description: "Instance ID.",
 			},
 			{
 				Name:        "name",
@@ -42,17 +42,17 @@ func tableOvhCloudInstance() *plugin.Table {
 			{
 				Name:        "flavor_id",
 				Type:        proto.ColumnType_STRING,
-				Description: "Instance flavor id.",
+				Description: "Instance flavor ID.",
 			},
 			{
 				Name:        "image_id",
 				Type:        proto.ColumnType_STRING,
-				Description: "Instance image id.",
+				Description: "Instance image ID.",
 			},
 			{
 				Name:        "ssh_key_id",
 				Type:        proto.ColumnType_STRING,
-				Description: "Instance ssh key id.",
+				Description: "Instance ssh key ID.",
 			},
 			{
 				Name:        "created_at",
