@@ -12,7 +12,7 @@ The `ovh_cloud_data_job` table can be used to query information about your jobs 
 select
   id,
   name,
-  status,
+  status
 from
   ovh_cloud_data_job
 where
@@ -25,7 +25,7 @@ where
 select
   id,
   name,
-  status,
+  status
 from
   ovh_cloud_data_job
 where

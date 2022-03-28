@@ -11,7 +11,7 @@ The `ovh_cloud_storage` table can be used to query information about storage con
 ```sql
 select
   id,
-  name,
+  name
 from
   ovh_cloud_storage
 where
@@ -23,7 +23,7 @@ where
 ```sql
 select
   id,
-  name,
+  name
 from
   ovh_cloud_storage
 where
