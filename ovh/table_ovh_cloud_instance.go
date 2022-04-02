@@ -88,8 +88,11 @@ type Instance struct {
 	ID                          string    `json:"id"`
 	Name                        string    `json:"name"`
 	FlavorID                    string    `json:"flavorId"`
+	Flavor                      Flavor    `json:"flavor"`
 	ImageID                     string    `json:"imageId"`
+	Image                       Image     `json:"image"`
 	SSHKeyID                    string    `json:"sshKeyId"`
+	SSHKey                      Sshkey    `json:"sshKey"`
 	Created                     time.Time `json:"created"`
 	Region                      string    `json:"region"`
 	Status                      string    `json:"status"`
@@ -126,5 +129,8 @@ func getInstance(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 	if err != nil {
 		return nil, err
 	}
+	instance.ImageID = instance.Image.ID
+	instance.FlavorID = instance.Flavor.ID
+	instance.SSHKeyID = instance.SSHKey.ID
 	return instance, nil
 }
