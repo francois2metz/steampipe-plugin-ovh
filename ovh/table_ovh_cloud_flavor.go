@@ -12,7 +12,7 @@ import (
 func tableOvhCloudFlavor() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_flavor",
-		Description: "Get flavors.",
+		Description: "A flavor is the instance model defining its characteristics in terms of resources.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listFlavor,

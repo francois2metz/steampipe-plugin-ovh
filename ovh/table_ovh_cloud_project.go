@@ -13,7 +13,7 @@ import (
 func tableOvhCloudProject() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_project",
-		Description: "List available project.",
+		Description: "A cloud project is a way to regroup instance, storage, database, ... under a name.",
 		List: &plugin.ListConfig{
 			Hydrate: listProject,
 		},

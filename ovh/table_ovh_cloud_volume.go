@@ -13,7 +13,7 @@ import (
 func tableOvhCloudVolume() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_volume",
-		Description: "Get cloud volumes.",
+		Description: "A volume is an independent additional disk.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listVolume,

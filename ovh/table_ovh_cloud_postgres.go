@@ -13,7 +13,7 @@ import (
 func tableOvhCloudPostgres() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_postgres",
-		Description: "List all the postgresql of the project.",
+		Description: "An hosted postgres database.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listPostgres,

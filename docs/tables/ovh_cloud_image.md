@@ -1,6 +1,6 @@
 # Table: ovh_cloud_image
 
-An image is a pre-installed, ready-to-use operating system. 
+An image is a pre-installed, ready-to-use operating system.
 
 The `ovh_cloud_image` table can be used to query information about images and **you must specify which cloud project** in the where or join clause (`where project_id=`, `join ovh_cloud_project on id=`).
 

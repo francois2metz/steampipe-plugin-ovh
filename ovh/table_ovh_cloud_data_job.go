@@ -13,7 +13,7 @@ import (
 func tableOvhCloudDataJob() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_data_job",
-		Description: "Get cloud data jobs.",
+		Description: "A data job is processed by OVH by Apache Spark.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listDataJob,

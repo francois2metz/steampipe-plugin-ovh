@@ -13,7 +13,7 @@ import (
 func tableOvhCloudInstance() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_instance",
-		Description: "Get cloud instance.",
+		Description: "An instance is a virtual server in the OVH cloud.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listInstance,

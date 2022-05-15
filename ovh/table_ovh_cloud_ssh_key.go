@@ -12,7 +12,7 @@ import (
 func tableOvhCloudSshKey() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_ssh_key",
-		Description: "Get SSH Keys.",
+		Description: "An ssh key allows you to connect to an instance.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listSshKey,

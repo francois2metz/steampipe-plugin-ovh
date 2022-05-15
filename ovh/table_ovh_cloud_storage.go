@@ -12,7 +12,7 @@ import (
 func tableOvhCloudStorage() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_storage",
-		Description: "Get storage containers.",
+		Description: "A storage is an object storage similar to S3.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listStorageContainer,

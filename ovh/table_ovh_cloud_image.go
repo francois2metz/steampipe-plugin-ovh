@@ -13,7 +13,7 @@ import (
 func tableOvhCloudImage() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_image",
-		Description: "Get images.",
+		Description: "An image is a pre-installed, ready-to-use operating system.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listImage,
