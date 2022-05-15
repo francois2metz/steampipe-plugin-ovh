@@ -9,17 +9,17 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v3/plugin/transform"
 )
 
-func tableOvhCloudSshkey() *plugin.Table {
+func tableOvhCloudSshKey() *plugin.Table {
 	return &plugin.Table{
-		Name:        "ovh_cloud_sshkey",
+		Name:        "ovh_cloud_ssh_key",
 		Description: "Get SSH Keys.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
-			Hydrate:    listSshkey,
+			Hydrate:    listSshKey,
 		},
 		Get: &plugin.GetConfig{
 			KeyColumns: plugin.AllColumns([]string{"project_id", "id"}),
-			Hydrate:    getSshkey,
+			Hydrate:    getSshKey,
 		},
 		Columns: []*plugin.Column{
 			{
@@ -47,40 +47,40 @@ func tableOvhCloudSshkey() *plugin.Table {
 	}
 }
 
-type Sshkey struct {
+type SshKey struct {
 	ID        string `json:"id"`
 	Name      string `json:"name"`
 	PublicKey string `json:"publicKey"`
 }
 
-func listSshkey(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
+func listSshKey(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
-	var sshkeys []Sshkey
-	err = client.Get(fmt.Sprintf("/cloud/project/%s/sshkey", projectId), &sshkeys)
+	var sshKeys []SshKey
+	err = client.Get(fmt.Sprintf("/cloud/project/%s/sshkey", projectId), &sshKeys)
 	if err != nil {
 		return nil, err
 	}
-	for _, sshkey := range sshkeys {
-		d.StreamListItem(ctx, sshkey)
+	for _, sshKey := range sshKeys {
+		d.StreamListItem(ctx, sshKey)
 	}
 	return nil, nil
 }
 
-func getSshkey(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
+func getSshKey(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 	id := d.KeyColumnQuals["id"].GetStringValue()
-	var sshkey Sshkey
-	err = client.Get(fmt.Sprintf("/cloud/project/%s/sshkey/%s", projectId, id), &sshkey)
+	var sshKey SshKey
+	err = client.Get(fmt.Sprintf("/cloud/project/%s/sshkey/%s", projectId, id), &sshKey)
 	if err != nil {
 		return nil, err
 	}
-	return sshkey, nil
+	return sshKey, nil
 }

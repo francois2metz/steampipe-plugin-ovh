@@ -22,7 +22,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 			"ovh_cloud_instance": tableOvhCloudInstance(),
 			"ovh_cloud_postgres": tableOvhCloudPostgres(),
 			"ovh_cloud_project":  tableOvhCloudProject(),
-			"ovh_cloud_sshkey":   tableOvhCloudSshkey(),
+			"ovh_cloud_ssh_key":  tableOvhCloudSshKey(),
 			"ovh_cloud_storage":  tableOvhCloudStorage(),
 			"ovh_cloud_volume":   tableOvhCloudVolume(),
 		},

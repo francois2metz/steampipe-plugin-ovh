@@ -92,7 +92,7 @@ type Instance struct {
 	ImageID                     string    `json:"imageId"`
 	Image                       Image     `json:"image"`
 	SSHKeyID                    string    `json:"sshKeyId"`
-	SSHKey                      Sshkey    `json:"sshKey"`
+	SSHKey                      SshKey    `json:"sshKey"`
 	Created                     time.Time `json:"created"`
 	Region                      string    `json:"region"`
 	Status                      string    `json:"status"`
