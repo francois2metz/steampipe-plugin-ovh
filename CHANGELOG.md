@@ -1,3 +1,10 @@
+## v0.0.3 [2022-05-15]
+
+_What's new?_
+
+- Rename table ovh_cloud_sshkey table to ovh_cloud_ssh_key
+- Documentation updates
+
 ## v0.0.2 [2022-05-06]
 
 _What's new?_
