@@ -19,3 +19,18 @@ from
 where
   project_id='27c5a6d3dfez87893jfd88fdsfmvnqb8'
 ```
+
+### List not ready postgres instances of a cloud project
+
+```sql
+select
+  id,
+  plan,
+  status,
+  description
+from
+  ovh_cloud_postgres
+where
+  project_id='27c5a6d3dfez87893jfd88fdsfmvnqb8'
+  and status!='READY'
+```

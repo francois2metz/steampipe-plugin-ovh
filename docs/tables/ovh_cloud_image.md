@@ -18,3 +18,18 @@ from
 where
   project_id='27c5a6d3dfez87893jfd88fdsfmvnqb8'
 ```
+
+### List public linux images of a cloud project
+
+```sql
+select
+  id,
+  name,
+  type
+from
+  ovh_cloud_image
+where
+  project_id='27c5a6d3dfez87893jfd88fdsfmvnqb8'
+  and visibility='public'
+  and type='linux'
+```
