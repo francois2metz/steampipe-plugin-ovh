@@ -57,7 +57,7 @@ Installing the latest ovh plugin will create a config file (`~/.steampipe/config
 connection "ovh" {
     plugin = "francois2metz/ovh"
 
-    # Go to https://eu.api.ovh.com/createToken/ to create your application key,
+    # Go to https://www.ovh.com/auth/api/createToken to create your application key,
     # secret and the consumer key
     # For the rights, GET with the path *
     application_key = "CitIbyantOosuzFu"
