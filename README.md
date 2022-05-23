@@ -1,3 +1,5 @@
+![Steampipe + OVH](docs/ovh-social-graphic.png)
+
 # OVH plugin for Steampipe
 
 Use SQL to query infrastructure from [OVH][].
