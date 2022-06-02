@@ -21,19 +21,18 @@ func connect(ctx context.Context, d *plugin.QueryData) (*ovh.Client, error) {
 	endpoint := ""
 
 	ovhConfig := GetConfig(d.Connection)
-	if &ovhConfig != nil {
-		if ovhConfig.ApplicationKey != nil {
-			applicationKey = *ovhConfig.ApplicationKey
-		}
-		if ovhConfig.ApplicationSecret != nil {
-			applicationSecret = *ovhConfig.ApplicationSecret
-		}
-		if ovhConfig.ConsumerKey != nil {
-			consumerKey = *ovhConfig.ConsumerKey
-		}
-		if ovhConfig.Endpoint != nil {
-			endpoint = *ovhConfig.Endpoint
-		}
+
+	if ovhConfig.ApplicationKey != nil {
+		applicationKey = *ovhConfig.ApplicationKey
+	}
+	if ovhConfig.ApplicationSecret != nil {
+		applicationSecret = *ovhConfig.ApplicationSecret
+	}
+	if ovhConfig.ConsumerKey != nil {
+		consumerKey = *ovhConfig.ConsumerKey
+	}
+	if ovhConfig.Endpoint != nil {
+		endpoint = *ovhConfig.Endpoint
 	}
 
 	if applicationKey == "" {
