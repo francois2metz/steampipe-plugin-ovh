@@ -1,3 +1,11 @@
+## v0.1.0 [2022-06-15]
+
+_What's new?_
+
+- Add table ovh_cloud_database table
+- Add errors logs to all API calls
+- Update steampipe sdk to 3.2.0
+
 ## v0.0.3 [2022-05-15]
 
 _What's new?_
