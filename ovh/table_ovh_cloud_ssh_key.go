@@ -56,12 +56,14 @@ type SshKey struct {
 func listSshKey(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_ssh_key.listSshKey", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 	var sshKeys []SshKey
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/sshkey", projectId), &sshKeys)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_ssh_key.listSshKey", err)
 		return nil, err
 	}
 	for _, sshKey := range sshKeys {
@@ -73,6 +75,7 @@ func listSshKey(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData)
 func getSshKey(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_ssh_key.getSshKey", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
@@ -80,6 +83,7 @@ func getSshKey(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) 
 	var sshKey SshKey
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/sshkey/%s", projectId, id), &sshKey)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_ssh_key.getSshKey", err)
 		return nil, err
 	}
 	return sshKey, nil

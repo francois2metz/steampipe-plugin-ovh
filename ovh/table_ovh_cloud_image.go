@@ -126,12 +126,14 @@ type Image struct {
 func listImage(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_image.listImage", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 	var images []Image
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/image", projectId), &images)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_image.listImage", err)
 		return nil, err
 	}
 	for _, image := range images {
@@ -143,6 +145,7 @@ func listImage(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) 
 func getImage(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_image.getImage", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
@@ -150,6 +153,7 @@ func getImage(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (
 	var image Image
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/image/%s", projectId, id), &image)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_image.getImage", err)
 		return nil, err
 	}
 	return image, nil

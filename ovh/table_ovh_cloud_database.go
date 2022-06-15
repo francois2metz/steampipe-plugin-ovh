@@ -119,11 +119,13 @@ func getDatabaseInfo(ctx context.Context, d *plugin.QueryData, h *plugin.Hydrate
 
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_database.getDatabaseInfo", "connection_error", err)
 		return nil, err
 	}
 
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/database/service/%s", projectId, database.ID), &database)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_database.getDatabaseInfo", err)
 		return nil, err
 	}
 	return database, nil
@@ -132,12 +134,14 @@ func getDatabaseInfo(ctx context.Context, d *plugin.QueryData, h *plugin.Hydrate
 func listDatabase(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_database.listDatabaseInfo", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 	var databaseIds []string
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/database/service", projectId), &databaseIds)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_database.listDatabaseInfo", err)
 		return nil, err
 	}
 	for _, databaseId := range databaseIds {

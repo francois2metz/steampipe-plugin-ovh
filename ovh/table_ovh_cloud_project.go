@@ -110,11 +110,13 @@ func getProjectInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateD
 
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_project.getProjectInfo", "connection_error", err)
 		return nil, err
 	}
 
 	err = client.Get(fmt.Sprintf("/cloud/project/%s", project.ID), &project)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_project.getProjectInfo", err)
 		return nil, err
 	}
 	return project, nil
@@ -123,11 +125,13 @@ func getProjectInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateD
 func listProject(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_project.listProject", "connection_error", err)
 		return nil, err
 	}
 	var projects []string
 	err = client.Get("/cloud/project", &projects)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_project.listProject", err)
 		return nil, err
 	}
 	for _, projectId := range projects {

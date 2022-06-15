@@ -103,12 +103,14 @@ type Instance struct {
 func listInstance(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_instance.listInstance", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 	var instances []Instance
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/instance", projectId), &instances)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_instance.listInstance", err)
 		return nil, err
 	}
 	for _, instance := range instances {
@@ -120,6 +122,7 @@ func listInstance(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDat
 func getInstance(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_instance.getInstance", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
@@ -127,6 +130,7 @@ func getInstance(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 	var instance Instance
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/instance/%s", projectId, id), &instance)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_instance.getInstance", err)
 		return nil, err
 	}
 	instance.ImageID = instance.Image.ID

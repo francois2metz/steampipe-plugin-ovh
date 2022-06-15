@@ -106,12 +106,14 @@ type Volume struct {
 func listVolume(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_volume.listVolume", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 	var volumes []Volume
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/volume", projectId), &volumes)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_volume.listVolume", err)
 		return nil, err
 	}
 	for _, volume := range volumes {
@@ -123,6 +125,7 @@ func listVolume(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData)
 func getVolume(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_volume.getVolume", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
@@ -130,6 +133,7 @@ func getVolume(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) 
 	var volume Volume
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/volume/%s", projectId, id), &volume)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_volume.getVolume", err)
 		return nil, err
 	}
 	return volume, nil

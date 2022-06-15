@@ -68,12 +68,14 @@ type StorageContainer struct {
 func listStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_storage.listStorageContainer", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 	var containers []StorageContainer
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/storage", projectId), &containers)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_storage.listStorageContainer", err)
 		return nil, err
 	}
 	for _, container := range containers {
@@ -85,6 +87,7 @@ func listStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.Hy
 func getStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_storage.getStorageContainer", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
@@ -92,6 +95,7 @@ func getStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.Hyd
 	var container StorageContainer
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/storage/%s", projectId, id), &container)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_storage.getStorageContainer", err)
 		return nil, err
 	}
 	container.ID = id

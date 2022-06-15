@@ -131,12 +131,14 @@ type Flavor struct {
 func listFlavor(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_flavor.listFlavor", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 	var flavors []Flavor
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/flavor", projectId), &flavors)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_flavor.listFlavor", err)
 		return nil, err
 	}
 	for _, flavor := range flavors {
@@ -148,6 +150,7 @@ func listFlavor(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData)
 func getFlavor(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_flavor.getFlavor", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
@@ -155,6 +158,7 @@ func getFlavor(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) 
 	var flavor Flavor
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/flavor/%s", projectId, id), &flavor)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_flavor.getFlavor", err)
 		return nil, err
 	}
 	return flavor, nil

@@ -125,11 +125,13 @@ func getDataJobInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateD
 
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_data_job.getDataJobInfo", "connection_error", err)
 		return nil, err
 	}
 
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/dataProcessing/jobs/%s", projectId, job.ID), &job)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_data_job.getDataJobInfo", err)
 		return nil, err
 	}
 	return job, nil
@@ -138,12 +140,14 @@ func getDataJobInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateD
 func listDataJob(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_data_job.listDataJobInfo", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 	var jobIds []string
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/dataProcessing/jobs", projectId), &jobIds)
 	if err != nil {
+		plugin.Logger(ctx).Error("ovh_cloud_data_job.listDataJobInfo", err)
 		return nil, err
 	}
 	for _, jobId := range jobIds {
