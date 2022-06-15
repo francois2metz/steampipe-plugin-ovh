@@ -88,14 +88,21 @@ func tableOvhCloudDatabase() *plugin.Table {
 				Type:        proto.ColumnType_STRING,
 				Description: "The VM flavor used for this cluster.",
 			},
+			{
+				Name:        "backup_time",
+				Hydrate:     getDatabaseInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Time on which backups start every day.",
+			},
+			{
+				Name:        "maintenance_time",
+				Hydrate:     getDatabaseInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Time on which maintenances can start every day.",
+			},
 		},
 	}
 
-}
-
-type MaintenanceWindow struct {
-	Start string `json:"start"`
-	End   string `json:"end"`
 }
 
 type Database struct {
@@ -106,10 +113,11 @@ type Database struct {
 	Status            string            `json:"status"`
 	NodeNumber        int               `json:"nodeNumber"`
 	Description       string            `json:"description"`
-	MaintenanceWindow MaintenanceWindow `json:"maintenance_window"`
 	Version           string            `json:"version"`
 	NetworkType       string            `json:"networkType"`
 	Flavor            string            `json:"flavor"`
+	BackupTime        string            `json:"backupTime"`
+	MaintenanceTime   string            `json:"maintenanceTime"`
 }
 
 func getDatabaseInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
