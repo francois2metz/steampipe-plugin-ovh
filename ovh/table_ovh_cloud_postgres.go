@@ -21,9 +21,6 @@ func tableOvhCloudPostgres() *plugin.Table {
 			KeyColumns: plugin.AllColumns([]string{"project_id", "id"}),
 			Hydrate:    getPostgres,
 		},
-		HydrateDependencies: []plugin.HydrateDependencies{
-			{Func: getProjectInfo},
-		},
 		Columns: []*plugin.Column{
 			{
 				Name:        "project_id",
