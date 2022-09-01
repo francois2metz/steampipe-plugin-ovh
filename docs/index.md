@@ -60,9 +60,9 @@ connection "ovh" {
     # Go to https://www.ovh.com/auth/api/createToken to create your application key,
     # secret and the consumer key
     # For the rights, GET with the path *
-    application_key = "CitIbyantOosuzFu"
-    application_secret = "phoagDakOywytMibfetJidloidvuenVo"
-    consumer_key = "einbycsAnmachCeOkvabicdifAdofdon"
+    # application_key = "CitIbyantOosuzFu"
+    # application_secret = "phoagDakOywytMibfetJidloidvuenVo"
+    # consumer_key = "einbycsAnmachCeOkvabicdifAdofdon"
 
     # OVH Endpoint
     # 'ovh-eu' for OVH Europe API
