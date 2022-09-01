@@ -1,3 +1,11 @@
+## v0.2.0 [2022-09-01]
+
+_What's new?_
+
+- Update SDK to 4.1.5
+- Update to go 1.19
+- The default API key is commented
+
 ## v0.1.0 [2022-06-15]
 
 _What's new?_
