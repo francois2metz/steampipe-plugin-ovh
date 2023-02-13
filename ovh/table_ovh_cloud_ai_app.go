@@ -99,7 +99,6 @@ type AIAppStatus struct {
 }
 
 func getAIApp(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	plugin.Logger(ctx).Trace("getAIApp")
 	app := h.Item.(AIApp)
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 

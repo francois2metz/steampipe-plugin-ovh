@@ -92,7 +92,6 @@ type AIJobStatus struct {
 }
 
 func getAIJob(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	plugin.Logger(ctx).Trace("getAIJob")
 	job := h.Item.(AIJob)
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 

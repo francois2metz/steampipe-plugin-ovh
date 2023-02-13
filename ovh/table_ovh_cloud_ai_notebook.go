@@ -110,7 +110,6 @@ type AINotebookStatus struct {
 }
 
 func getAINotebook(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	plugin.Logger(ctx).Trace("getAINotebook")
 	notebook := h.Item.(AINotebook)
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 

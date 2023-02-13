@@ -105,7 +105,6 @@ type Project struct {
 }
 
 func getProjectInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	plugin.Logger(ctx).Trace("getProjectInfo")
 	project := h.Item.(Project)
 
 	client, err := connect(ctx, d)
