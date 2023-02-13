@@ -1,6 +1,6 @@
 # Table: ovh_cloud_ai_job
 
-An AI job is run by OVHcloud AI Training.
+OVHcloud AI Training lets you train your AI, machine learning and deep learning models efficiently and easily, and optimise your GPU usage. See the [official guide](https://www.ovhcloud.com/en/public-cloud/ai-training/).
 
 The `ovh_cloud_ai_job` table can be used to query information about your AI jobs and **you must specify which cloud project** in the where or join clause (`where project_id=`, `join ovh_cloud_project on id=`).
 

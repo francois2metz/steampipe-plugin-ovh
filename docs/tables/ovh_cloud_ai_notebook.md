@@ -1,6 +1,6 @@
 # Table: ovh_cloud_ai_notebook
 
-An AI notebook is run by OVHcloud AI Notebook.
+OVHcloud AI Notebook gives a quick and simple start launching your Jupyter or VS Code notebooks in the cloud. See the [official guide](https://www.ovhcloud.com/en/public-cloud/ai-notebooks/).
 
 The `ovh_cloud_ai_notebook` table can be used to query information about your AI notebooks and **you must specify which cloud project** in the where or join clause (`where project_id=`, `join ovh_cloud_project on id=`).
 

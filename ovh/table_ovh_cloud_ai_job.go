@@ -13,7 +13,7 @@ import (
 func tableOvhCloudAIJob() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_ai_job",
-		Description: "An AI job is run by OVHcloud AI Training.",
+		Description: "OVHcloud AI Training lets you train your AI, machine learning and deep learning models efficiently and easily, and optimise your GPU usage.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listAIJob,

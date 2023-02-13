@@ -1,6 +1,6 @@
 # Table: ovh_cloud_ai_app
 
-An AI app is run by OVHcloud AI Deploy.
+OVHcloud AI Deploy lets you easily deploy machine learning models and applications to production, create your API access points effortlessly, and make effective predictions. See the [official guide](https://www.ovhcloud.com/en/public-cloud/ai-deploy/).
 
 The `ovh_cloud_ai_app` table can be used to query information about your AI apps and **you must specify which cloud project** in the where or join clause (`where project_id=`, `join ovh_cloud_project on id=`).
 

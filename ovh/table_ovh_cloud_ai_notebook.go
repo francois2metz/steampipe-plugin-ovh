@@ -13,7 +13,7 @@ import (
 func tableOvhCloudAINotebook() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_ai_notebook",
-		Description: "An AI notebook is run by OVHcloud AI Notebook.",
+		Description: "OVHcloud AI Notebook gives a quick and simple start launching your Jupyter or VS Code notebooks in the cloud.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listAINotebook,

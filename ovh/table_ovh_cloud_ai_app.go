@@ -13,7 +13,7 @@ import (
 func tableOvhCloudAIApp() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_ai_app",
-		Description: "An AI app is run by OVHcloud AI Deploy.",
+		Description: "OVHcloud AI Deploy lets you easily deploy machine learning models and applications to production, create your API access points effortlessly, and make effective predictions.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listAIApp,
