@@ -3,7 +3,7 @@ module github.com/francois2metz/steampipe-plugin-ovh
 go 1.19
 
 require (
-	github.com/ovh/go-ovh v1.1.0
+	github.com/ovh/go-ovh v1.3.0
 	github.com/turbot/steampipe-plugin-sdk/v4 v4.1.5
 )
 
