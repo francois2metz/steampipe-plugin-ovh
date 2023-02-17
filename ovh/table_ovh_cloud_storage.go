@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableOvhCloudStorage() *plugin.Table {
@@ -71,7 +71,7 @@ func listStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.Hy
 		plugin.Logger(ctx).Error("ovh_cloud_storage.listStorageContainer", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 	var containers []StorageContainer
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/storage", projectId), &containers)
 	if err != nil {
@@ -90,8 +90,8 @@ func getStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.Hyd
 		plugin.Logger(ctx).Error("ovh_cloud_storage.getStorageContainer", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
-	id := d.KeyColumnQuals["id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
+	id := d.EqualsQuals["id"].GetStringValue()
 	var container StorageContainer
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/storage/%s", projectId, id), &container)
 	if err != nil {

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableOvhCloudAIApp() *plugin.Table {
@@ -100,7 +100,7 @@ type AIAppStatus struct {
 
 func getAIApp(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
 	app := h.Item.(AIApp)
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 
 	client, err := connect(ctx, d)
 	if err != nil {
@@ -122,7 +122,7 @@ func listAIApp(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) 
 		plugin.Logger(ctx).Error("ovh_cloud_ai_app.listAIApp", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 	var apps []AIApp
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/ai/app", projectId), &apps)
 	if err != nil {

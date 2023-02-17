@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableOvhCloudImage() *plugin.Table {
@@ -129,7 +129,7 @@ func listImage(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) 
 		plugin.Logger(ctx).Error("ovh_cloud_image.listImage", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 	var images []Image
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/image", projectId), &images)
 	if err != nil {
@@ -148,8 +148,8 @@ func getImage(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (
 		plugin.Logger(ctx).Error("ovh_cloud_image.getImage", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
-	id := d.KeyColumnQuals["id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
+	id := d.EqualsQuals["id"].GetStringValue()
 	var image Image
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/image/%s", projectId, id), &image)
 	if err != nil {

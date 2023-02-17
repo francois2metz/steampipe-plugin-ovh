@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableOvhCloudVolume() *plugin.Table {
@@ -109,7 +109,7 @@ func listVolume(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData)
 		plugin.Logger(ctx).Error("ovh_cloud_volume.listVolume", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 	var volumes []Volume
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/volume", projectId), &volumes)
 	if err != nil {
@@ -128,8 +128,8 @@ func getVolume(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) 
 		plugin.Logger(ctx).Error("ovh_cloud_volume.getVolume", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
-	id := d.KeyColumnQuals["id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
+	id := d.EqualsQuals["id"].GetStringValue()
 	var volume Volume
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/volume/%s", projectId, id), &volume)
 	if err != nil {

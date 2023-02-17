@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableOvhCloudFlavor() *plugin.Table {
@@ -134,7 +134,7 @@ func listFlavor(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData)
 		plugin.Logger(ctx).Error("ovh_cloud_flavor.listFlavor", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 	var flavors []Flavor
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/flavor", projectId), &flavors)
 	if err != nil {
@@ -153,8 +153,8 @@ func getFlavor(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) 
 		plugin.Logger(ctx).Error("ovh_cloud_flavor.getFlavor", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
-	id := d.KeyColumnQuals["id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
+	id := d.EqualsQuals["id"].GetStringValue()
 	var flavor Flavor
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/flavor/%s", projectId, id), &flavor)
 	if err != nil {

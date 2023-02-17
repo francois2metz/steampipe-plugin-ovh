@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableOvhCloudDataJob() *plugin.Table {
@@ -120,7 +120,7 @@ type Job struct {
 
 func getDataJobInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
 	job := h.Item.(Job)
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 
 	client, err := connect(ctx, d)
 	if err != nil {
@@ -142,7 +142,7 @@ func listDataJob(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 		plugin.Logger(ctx).Error("ovh_cloud_data_job.listDataJobInfo", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 	var jobIds []string
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/dataProcessing/jobs", projectId), &jobIds)
 	if err != nil {
@@ -158,7 +158,7 @@ func listDataJob(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 }
 
 func getDataJob(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
-	id := d.KeyColumnQuals["id"].GetStringValue()
+	id := d.EqualsQuals["id"].GetStringValue()
 	var job Job
 	job.ID = id
 	return job, nil

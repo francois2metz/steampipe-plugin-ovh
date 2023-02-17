@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableOvhCloudAINotebook() *plugin.Table {
@@ -111,7 +111,7 @@ type AINotebookStatus struct {
 
 func getAINotebook(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
 	notebook := h.Item.(AINotebook)
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 
 	client, err := connect(ctx, d)
 	if err != nil {
@@ -133,7 +133,7 @@ func listAINotebook(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateD
 		plugin.Logger(ctx).Error("ovh_cloud_ai_notebook.listAINotebook", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 	var notebooks []AINotebook
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/ai/notebook", projectId), &notebooks)
 	if err != nil {

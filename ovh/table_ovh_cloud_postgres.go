@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableOvhCloudPostgres() *plugin.Table {
@@ -93,7 +93,7 @@ func tableOvhCloudPostgres() *plugin.Table {
 }
 func getPostgresInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
 	postgres := h.Item.(Database)
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 
 	client, err := connect(ctx, d)
 	if err != nil {
@@ -115,7 +115,7 @@ func listPostgres(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDat
 		plugin.Logger(ctx).Error("ovh_cloud_postgres.listPostgres", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
+	projectId := d.EqualsQuals["project_id"].GetStringValue()
 	var postgresIds []string
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/database/postgresql", projectId), &postgresIds)
 	if err != nil {
@@ -131,7 +131,7 @@ func listPostgres(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDat
 }
 
 func getPostgres(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
-	id := d.KeyColumnQuals["id"].GetStringValue()
+	id := d.EqualsQuals["id"].GetStringValue()
 	var postgres Database
 	postgres.ID = id
 	return postgres, nil
