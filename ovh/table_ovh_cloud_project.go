@@ -21,7 +21,7 @@ func tableOvhCloudProject() *plugin.Table {
 			KeyColumns: plugin.SingleColumn("id"),
 			Hydrate:    getProject,
 		},
-		HydrateDependencies: []plugin.HydrateDependencies{
+		HydrateConfig: []plugin.HydrateConfig{
 			{Func: getProjectInfo},
 		},
 		Columns: []*plugin.Column{

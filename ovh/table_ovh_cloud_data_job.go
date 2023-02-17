@@ -22,7 +22,7 @@ func tableOvhCloudDataJob() *plugin.Table {
 			KeyColumns: plugin.AllColumns([]string{"project_id", "id"}),
 			Hydrate:    getDataJob,
 		},
-		HydrateDependencies: []plugin.HydrateDependencies{
+		HydrateConfig: []plugin.HydrateConfig{
 			{Func: getDataJobInfo},
 		},
 		Columns: []*plugin.Column{
