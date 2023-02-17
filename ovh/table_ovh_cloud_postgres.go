@@ -92,7 +92,6 @@ func tableOvhCloudPostgres() *plugin.Table {
 
 }
 func getPostgresInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	plugin.Logger(ctx).Trace("getPostgresInfo")
 	postgres := h.Item.(Database)
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 

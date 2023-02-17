@@ -106,22 +106,21 @@ func tableOvhCloudDatabase() *plugin.Table {
 }
 
 type Database struct {
-	ID                string            `json:"id"`
-	CreatedAt         *time.Time        `json:"createdAt"`
-	Plan              string            `json:"plan"`
-	Engine            string            `json:"engine"`
-	Status            string            `json:"status"`
-	NodeNumber        int               `json:"nodeNumber"`
-	Description       string            `json:"description"`
-	Version           string            `json:"version"`
-	NetworkType       string            `json:"networkType"`
-	Flavor            string            `json:"flavor"`
-	BackupTime        string            `json:"backupTime"`
-	MaintenanceTime   string            `json:"maintenanceTime"`
+	ID              string     `json:"id"`
+	CreatedAt       *time.Time `json:"createdAt"`
+	Plan            string     `json:"plan"`
+	Engine          string     `json:"engine"`
+	Status          string     `json:"status"`
+	NodeNumber      int        `json:"nodeNumber"`
+	Description     string     `json:"description"`
+	Version         string     `json:"version"`
+	NetworkType     string     `json:"networkType"`
+	Flavor          string     `json:"flavor"`
+	BackupTime      string     `json:"backupTime"`
+	MaintenanceTime string     `json:"maintenanceTime"`
 }
 
 func getDatabaseInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	plugin.Logger(ctx).Trace("getDatabaseInfo")
 	database := h.Item.(Database)
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 

@@ -119,7 +119,6 @@ type Job struct {
 }
 
 func getDataJobInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	plugin.Logger(ctx).Trace("getDataJobInfo")
 	job := h.Item.(Job)
 	projectId := d.KeyColumnQuals["project_id"].GetStringValue()
 
