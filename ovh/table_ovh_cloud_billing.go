@@ -104,8 +104,6 @@ func listBilling(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 		}
 
 		d.StreamListItem(ctx, bill)
-
-		return nil, nil
 	}
 
 	return nil, nil
@@ -113,17 +111,15 @@ func listBilling(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 
 func getBilling(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
+
 	if err != nil {
 		plugin.Logger(ctx).Error("ovh_billing.getBilling", "connection_error", err)
 		return nil, err
 	}
-	projectId := d.EqualsQuals["project_id"].GetStringValue()
-	id := d.EqualsQuals["id"].GetStringValue()
-	var billing BillingApi
-	err = client.Get(fmt.Sprintf("/cloud/project/%s/volume/%s", projectId, id), &billing)
-	if err != nil {
-		plugin.Logger(ctx).Error("ovh_billing.getBilling", err)
-		return nil, err
-	}
+
+	id := d.Quals.ToEqualsQualValueMap()["id"].GetStringValue()
+
+	billing, err := getOneBill(ctx, client, id)
+
 	return billing, nil
 }
