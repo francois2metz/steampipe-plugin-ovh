@@ -30,13 +30,15 @@ type BillingApi struct {
 }
 
 type Billing struct {
-	ID       string    `json:"id"`
-	Date     time.Time `json:"date"`
-	Url      string    `json:"url"`
-	PdfUrl   string    `json:"pdfUrl"`
-	OrderId  int       `json:"orderId"`
-	Category string    `json:"category"`
-	Password string    `json:"password"`
+	ID              string    `json:"id"`
+	Date            time.Time `json:"date"`
+	Tata            string    `json:"tata"`
+	PdfUrl          string    `json:"pdf_url"`
+	OrderId         int       `json:"order_id"`
+	Category        string    `json:"category"`
+	Password        string    `json:"password"`
+	PriceWithoutTax float64   `json:"price_without_tax"`
+	Tax             float64   `json:"tax"`
 }
 
 func tableOvhBilling() *plugin.Table {
@@ -53,11 +55,13 @@ func tableOvhBilling() *plugin.Table {
 		Columns: []*plugin.Column{
 			{Name: "id", Type: proto.ColumnType_STRING, Description: "ID of billing."},
 			{Name: "date", Type: proto.ColumnType_TIMESTAMP, Description: "Date of billing."},
-			{Name: "url", Type: proto.ColumnType_STRING, Description: "URL to download billing."},
-			{Name: "pdfUrl", Type: proto.ColumnType_STRING, Description: "URL to download billing in PDF format (maybe same as url field)."},
-			{Name: "orderId", Type: proto.ColumnType_INT, Description: "Order id."},
+			{Name: "tata", Type: proto.ColumnType_STRING, Description: "URL to download billing."},
+			{Name: "pdf_url", Type: proto.ColumnType_STRING, Description: "URL to download billing in PDF format (maybe same as url field)."},
+			{Name: "order_id", Type: proto.ColumnType_INT, Description: "Order id."},
 			{Name: "category", Type: proto.ColumnType_STRING, Description: "Category of billing (autorenew, earlyrenewal...)."},
 			{Name: "password", Type: proto.ColumnType_STRING, Description: "Password to download billing."},
+			{Name: "price_without_tax", Type: proto.ColumnType_DOUBLE, Description: "Password to download billing."},
+			{Name: "tax", Type: proto.ColumnType_DOUBLE, Description: "Password to download billing."},
 		},
 	}
 }
@@ -83,13 +87,15 @@ func getOneBill(ctx context.Context, client *ovh.Client, billId string) (Billing
 	}
 
 	bill := Billing{
-		ID:       billApi.ID,
-		Date:     billApi.Date,
-		Url:      billApi.Url,
-		PdfUrl:   billApi.PdfUrl,
-		OrderId:  billApi.OrderId,
-		Category: billApi.Category,
-		Password: billApi.Password,
+		ID:              billApi.ID,
+		Date:            billApi.Date,
+		Tata:            billApi.Url,
+		PdfUrl:          billApi.PdfUrl,
+		OrderId:         billApi.OrderId,
+		Category:        billApi.Category,
+		Password:        billApi.Password,
+		PriceWithoutTax: billApi.PriceWithoutTax.Value,
+		Tax:             billApi.Tax.Value,
 	}
 
 	logger.Debug("ovh_billing.getOneBill", fmt.Sprintf("Return bill %v+", bill))
@@ -123,6 +129,8 @@ func listBilling(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 		}
 
 		d.StreamListItem(ctx, bill)
+
+		return nil, nil
 	}
 
 	return nil, nil
