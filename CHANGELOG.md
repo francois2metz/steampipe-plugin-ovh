@@ -1,8 +1,15 @@
+## v0.4.0 [2023-03-08]
+
+_What's new?_
+
+- Add `ovh_bill` table. Thanks @emeric-martineau.
+- Update SDK to v5.2.0
+
 ## v0.3.0 [2023-02-17]
 
 _What's new?_
 
-- Add `ovh_cloud_ai_app ovh`, `ovh_cloud_ai_job` and `ovh_cloud_ai_notebook` tables. Thanks @Benzhaomin.
+- Add `ovh_cloud_ai_app`, `ovh_cloud_ai_job` and `ovh_cloud_ai_notebook` tables. Thanks @Benzhaomin.
 - Update SDK to v5
 
 ## v0.2.0 [2022-09-01]
