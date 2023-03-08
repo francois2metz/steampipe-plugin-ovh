@@ -18,6 +18,8 @@ type BillDetail struct {
 	Start       string `json:"periodStart"`
 	End         string `json:"periodEnd"`
 	Quantity    string `json:"quantity"`
+	TotalPrice  Price  `json:"totalPrice"`
+	UnitPrice   Price  `json:"unitPrice"`
 }
 
 func tableOvhBillDetails() *plugin.Table {
@@ -33,13 +35,63 @@ func tableOvhBillDetails() *plugin.Table {
 			Hydrate:    getBillingDetail,
 		},
 		Columns: []*plugin.Column{
-			{Name: "id", Type: proto.ColumnType_STRING, Description: "ID of detail's bill."},
-			{Name: "bill_id", Transform: transform.FromQual("bill_id"), Type: proto.ColumnType_STRING, Description: "ID of bill."},
-			{Name: "description", Hydrate: getGetBillDetailInfo, Type: proto.ColumnType_STRING, Description: "Description of detail."},
-			{Name: "domain", Hydrate: getGetBillDetailInfo, Type: proto.ColumnType_STRING, Description: "Domain."},
-			{Name: "start", Transform: transform.From(convertBillDetailDate), Hydrate: getGetBillDetailInfo, Type: proto.ColumnType_TIMESTAMP, Description: "Start date of detail."},
-			{Name: "end", Transform: transform.From(convertBillDetailDate), Hydrate: getGetBillDetailInfo, Type: proto.ColumnType_TIMESTAMP, Description: "End date of detail."},
-			{Name: "quantity", Hydrate: getGetBillDetailInfo, Type: proto.ColumnType_STRING, Description: "Quantity of detail."},
+			{
+				Name:        "id",
+				Type:        proto.ColumnType_STRING,
+				Description: "ID of detail's bill.",
+			},
+			{
+				Name:        "bill_id",
+				Transform:   transform.FromQual("bill_id"),
+				Type:        proto.ColumnType_STRING,
+				Description: "ID of bill.",
+			},
+			{
+				Name:        "description",
+				Hydrate:     getGetBillDetailInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Description of detail.",
+			},
+			{
+				Name:        "domain",
+				Hydrate:     getGetBillDetailInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Domain.",
+			},
+			{
+				Name:        "start",
+				Transform:   transform.From(convertBillDetailDate),
+				Hydrate:     getGetBillDetailInfo,
+				Type:        proto.ColumnType_TIMESTAMP,
+				Description: "Start date of detail.",
+			},
+			{
+				Name:        "end",
+				Transform:   transform.From(convertBillDetailDate),
+				Hydrate:     getGetBillDetailInfo,
+				Type:        proto.ColumnType_TIMESTAMP,
+				Description: "End date of detail.",
+			},
+			{
+				Name:        "quantity",
+				Hydrate:     getGetBillDetailInfo,
+				Type:        proto.ColumnType_STRING,
+				Description: "Quantity of detail.",
+			},
+			{
+				Name:        "total_price",
+				Hydrate:     getGetBillDetailInfo,
+				Type:        proto.ColumnType_DOUBLE,
+				Transform:   transform.FromField("TotalPrice.Value"),
+				Description: "Total price of this detail.",
+			},
+			{
+				Name:        "unit_price",
+				Hydrate:     getGetBillDetailInfo,
+				Type:        proto.ColumnType_DOUBLE,
+				Transform:   transform.FromField("UnitPrice.Value"),
+				Description: "Unit price of this detail.",
+			},
 		},
 	}
 }
