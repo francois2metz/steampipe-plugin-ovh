@@ -83,13 +83,13 @@ func tableOvhBilling() *plugin.Table {
 				Name: "price_without_tax",
 				Type: proto.ColumnType_DOUBLE,
 				Transform: transform.FromField("PriceWithoutTax.Value"),
-				Description: "Password to download billing.",
+				Description: "Price without tax.",
 			},
 			{
 				Name: "tax",
 				Type: proto.ColumnType_DOUBLE,
 				Transform: transform.FromField("Tax.Value"),
-				Description: "Password to download billing.",
+				Description: "Amount of the tax.",
 			},
 		},
 	}
