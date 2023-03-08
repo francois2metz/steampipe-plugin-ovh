@@ -27,7 +27,6 @@ type BillingApi struct {
 	PriceWithTax    PriceApi  `json:"priceWithTax"`
 	PriceWithoutTax PriceApi  `json:"priceWithoutTax"`
 	Tax             PriceApi  `json:"tax"`
-	//PdfBetaUrl string    `json:"pdfBetaUrl"`
 }
 
 func tableOvhBilling() *plugin.Table {
@@ -119,7 +118,7 @@ func getBilling(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData)
 
 	id := d.Quals.ToEqualsQualValueMap()["id"].GetStringValue()
 
-	billing, _ := getOneBill(ctx, client, id)
+	billing, err := getOneBill(ctx, client, id)
 
-	return billing, nil
+	return billing, err
 }
