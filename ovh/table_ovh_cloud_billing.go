@@ -119,7 +119,7 @@ func getBilling(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData)
 
 	id := d.Quals.ToEqualsQualValueMap()["id"].GetStringValue()
 
-	billing, err := getOneBill(ctx, client, id)
+	billing, _ := getOneBill(ctx, client, id)
 
 	return billing, nil
 }
