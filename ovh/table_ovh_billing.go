@@ -98,10 +98,6 @@ func tableOvhBilling() *plugin.Table {
 func getOneBill(ctx context.Context, client *ovh.Client, billId string) (BillingApi, error) {
 	logger := plugin.Logger(ctx)
 
-	if logger.IsDebug() {
-		logger.Debug("ovh_billing.getOneBill", fmt.Sprintf("Get bill (id: %s)", billId))
-	}
-
 	var billApi BillingApi
 
 	err := client.Get(fmt.Sprintf("/me/bill/%s", billId), &billApi)
@@ -109,10 +105,6 @@ func getOneBill(ctx context.Context, client *ovh.Client, billId string) (Billing
 	if err != nil {
 		plugin.Logger(ctx).Error("ovh_billing.getOneBill", err)
 		return BillingApi{}, err
-	}
-
-	if logger.IsDebug() {
-		logger.Debug("ovh_billing.getOneBill", fmt.Sprintf("Bill api %v+", billApi))
 	}
 
 	return billApi, nil
@@ -124,8 +116,6 @@ func listBilling(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 		plugin.Logger(ctx).Error("ovh_billing.listBilling", "connection_error", err)
 		return nil, err
 	}
-
-	plugin.Logger(ctx).Debug("ovh_billing.listBilling", "Get list of billing")
 
 	// First, we get IDs of billing
 	var billingsId []string
