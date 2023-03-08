@@ -67,7 +67,7 @@ func tableOvhBilling() *plugin.Table {
 				Name: "order_id",
 				Type: proto.ColumnType_INT,
 				Transform: transform.FromField("OrderId"),
-				Description: "Order id."
+				Description: "Order id.",
 			},
 			{
 				Name: "category",
@@ -96,8 +96,6 @@ func tableOvhBilling() *plugin.Table {
 }
 
 func getOneBill(ctx context.Context, client *ovh.Client, billId string) (BillingApi, error) {
-	logger := plugin.Logger(ctx)
-
 	var billApi BillingApi
 
 	err := client.Get(fmt.Sprintf("/me/bill/%s", billId), &billApi)
