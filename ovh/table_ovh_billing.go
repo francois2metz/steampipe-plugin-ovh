@@ -41,15 +41,56 @@ func tableOvhBilling() *plugin.Table {
 			Hydrate:    getBilling,
 		},
 		Columns: []*plugin.Column{
-			{Name: "id", Type: proto.ColumnType_STRING, Description: "ID of billing."},
-			{Name: "date", Type: proto.ColumnType_TIMESTAMP, Description: "Date of billing."},
-			{Name: "url", Type: proto.ColumnType_STRING, Transform: transform.FromField("Url"), Description: "URL to download billing."},
-			{Name: "pdf_url", Type: proto.ColumnType_STRING, Transform: transform.FromField("PdfUrl"), Description: "URL to download billing in PDF format (maybe same as url field)."},
-			{Name: "order_id", Type: proto.ColumnType_INT, Transform: transform.FromField("OrderId"), Description: "Order id."},
-			{Name: "category", Type: proto.ColumnType_STRING, Description: "Category of billing (autorenew, earlyrenewal...)."},
-			{Name: "password", Type: proto.ColumnType_STRING, Description: "Password to download billing."},
-			{Name: "price_without_tax", Type: proto.ColumnType_DOUBLE, Transform: transform.FromField("PriceWithoutTax.Value"), Description: "Password to download billing."},
-			{Name: "tax", Type: proto.ColumnType_DOUBLE, Transform: transform.FromField("Tax.Value"), Description: "Password to download billing."},
+			{
+				Name: "id",
+				Type: proto.ColumnType_STRING,
+				Description: "ID of billing.",
+			},
+			{
+				Name: "date",
+				Type: proto.ColumnType_TIMESTAMP,
+				Description: "Date of billing.",
+			},
+			{
+				Name: "url",
+				Type: proto.ColumnType_STRING,
+				Transform: transform.FromField("Url"),
+				Description: "URL to download billing.",
+			},
+			{
+				Name: "pdf_url",
+				Type: proto.ColumnType_STRING,
+				Transform: transform.FromField("PdfUrl"),
+				Description: "URL to download billing in PDF format (maybe same as url field).",
+			},
+			{
+				Name: "order_id",
+				Type: proto.ColumnType_INT,
+				Transform: transform.FromField("OrderId"),
+				Description: "Order id."
+			},
+			{
+				Name: "category",
+				Type: proto.ColumnType_STRING,
+				Description: "Category of billing (autorenew, earlyrenewal...).",
+			},
+			{
+				Name: "password",
+				Type: proto.ColumnType_STRING,
+				Description: "Password to download billing.",
+			},
+			{
+				Name: "price_without_tax",
+				Type: proto.ColumnType_DOUBLE,
+				Transform: transform.FromField("PriceWithoutTax.Value"),
+				Description: "Password to download billing.",
+			},
+			{
+				Name: "tax",
+				Type: proto.ColumnType_DOUBLE,
+				Transform: transform.FromField("Tax.Value"),
+				Description: "Password to download billing.",
+			},
 		},
 	}
 }
