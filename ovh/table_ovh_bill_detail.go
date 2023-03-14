@@ -131,7 +131,7 @@ func getGetBillDetailInfo(ctx context.Context, d *plugin.QueryData, h *plugin.Hy
 	err = client.Get(fmt.Sprintf("/me/bill/%s/details/%s", billDetail.BillID, billDetail.ID), &billDetail)
 
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_cloud_data_job.getDataJobInfo", err)
+		plugin.Logger(ctx).Error("ovh_bill_detail.getGetBillDetailInfo", err)
 		return nil, err
 	}
 
