@@ -1,3 +1,9 @@
+## v0.5.0 [2023-03-14]
+
+_What's new?_
+
+- Add `ovh_bill_detail` table. Thanks @emeric-martineau.
+
 ## v0.4.0 [2023-03-08]
 
 _What's new?_
