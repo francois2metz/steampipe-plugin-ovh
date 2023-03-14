@@ -1,8 +1,8 @@
-# Table: ovh_bill_details
+# Table: ovh_bill
 
 Details of the bill of your account.
 
-The `ovh_bill_details` table can be used to query information about your billing information.
+The `ovh_bill_detail` table can be used to query information about your billing information.
 
 ## Examples
 
@@ -12,7 +12,7 @@ The `ovh_bill_details` table can be used to query information about your billing
 select
   *
 from
-  ovh_bill_details
+  ovh_bill_detail
 where
   bill_id = 'FRxxxxxx';
 ```
@@ -23,7 +23,7 @@ where
 select
   *
 from
-  ovh_bill_details
+  ovh_bill_detail
 where
   bill_id = 'FRxxxxxxxx'
   and id = 'FRxxxxxxxx';

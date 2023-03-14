@@ -24,7 +24,7 @@ type BillDetail struct {
 
 func tableOvhBillDetails() *plugin.Table {
 	return &plugin.Table{
-		Name:        "ovh_bill_details",
+		Name:        "ovh_bill_detail",
 		Description: "Details' bill of you account.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.AllColumns([]string{"bill_id"}),
@@ -124,7 +124,7 @@ func getGetBillDetailInfo(ctx context.Context, d *plugin.QueryData, h *plugin.Hy
 	client, err := connect(ctx, d)
 
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_bill_details.getGetBillDetailInfo", "connection_error", err)
+		plugin.Logger(ctx).Error("ovh_bill_detail.getGetBillDetailInfo", "connection_error", err)
 		return nil, err
 	}
 
@@ -141,7 +141,7 @@ func getGetBillDetailInfo(ctx context.Context, d *plugin.QueryData, h *plugin.Hy
 func listBillingDetails(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_bill_details.listBillingDetails", "connection_error", err)
+		plugin.Logger(ctx).Error("ovh_bill_detail.listBillingDetails", "connection_error", err)
 		return nil, err
 	}
 
@@ -152,7 +152,7 @@ func listBillingDetails(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydr
 	err = client.Get(fmt.Sprintf("/me/bill/%s/details", billId), &billDetailsId)
 
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_bill_details.listBillingDetails", err)
+		plugin.Logger(ctx).Error("ovh_bill_detail.listBillingDetails", err)
 		return nil, err
 	}
 
