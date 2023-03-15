@@ -1,3 +1,9 @@
+## v0.5.1 [2023-03-15]
+
+_What's new?_
+
+- Rename `start` and `end` columns of the `ovh_bill_detail` to `period_start` and `period_end`.
+
 ## v0.5.0 [2023-03-14]
 
 _What's new?_
