@@ -3,6 +3,7 @@ package ovh
 import (
 	"context"
 	"fmt"
+	"reflect"
 	"time"
 
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
@@ -15,8 +16,8 @@ type BillDetail struct {
 	BillID      string `json:"bill_id"`
 	Description string `json:"description"`
 	Domain      string `json:"domain"`
-	Start       string `json:"periodStart"`
-	End         string `json:"periodEnd"`
+	PeriodStart string `json:"periodStart"`
+	PeriodEnd   string `json:"periodEnd"`
 	Quantity    string `json:"quantity"`
 	TotalPrice  Price  `json:"totalPrice"`
 	UnitPrice   Price  `json:"unitPrice"`
@@ -25,7 +26,7 @@ type BillDetail struct {
 func tableOvhBillDetails() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_bill_detail",
-		Description: "Details' bill of you account.",
+		Description: "Detail of a bill.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.AllColumns([]string{"bill_id"}),
 			Hydrate:    listBillingDetails,
@@ -59,18 +60,18 @@ func tableOvhBillDetails() *plugin.Table {
 				Description: "Domain.",
 			},
 			{
-				Name:        "start",
-				Transform:   transform.From(convertBillDetailDate),
+				Name:        "period_start",
+				Transform:   transform.FromP(convertBillDetailDate, "PeriodStart"),
 				Hydrate:     getGetBillDetailInfo,
 				Type:        proto.ColumnType_TIMESTAMP,
-				Description: "Start date of detail.",
+				Description: "Period start of the product detail.",
 			},
 			{
-				Name:        "end",
-				Transform:   transform.From(convertBillDetailDate),
+				Name:        "period_end",
+				Transform:   transform.FromP(convertBillDetailDate, "PeriodEnd"),
 				Hydrate:     getGetBillDetailInfo,
 				Type:        proto.ColumnType_TIMESTAMP,
-				Description: "End date of detail.",
+				Description: "Period end of the product detail.",
 			},
 			{
 				Name:        "quantity",
@@ -98,20 +99,12 @@ func tableOvhBillDetails() *plugin.Table {
 
 func convertBillDetailDate(ctx context.Context, d *transform.TransformData) (interface{}, error) {
 	billDetail := d.HydrateItem.(BillDetail)
-
-	var value string
-
-	switch d.ColumnName {
-	case "start":
-		value = billDetail.Start
-	case "end":
-		value = billDetail.End
-	}
-
+	columnName := d.Param.(string)
+	billDetailReflect := reflect.ValueOf(billDetail)
+	value := billDetailReflect.FieldByName(columnName).String()
 	if len(value) == 0 {
 		return nil, nil
 	}
-
 	t, err := time.Parse("2006-01-02", value)
 
 	return t, err
