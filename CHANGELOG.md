@@ -1,3 +1,10 @@
+## v0.6.0 [2023-10-15]
+
+_What's new?_
+
+- Update SDK to v5.6.2
+- Update go to 1.21
+
 ## v0.5.1 [2023-03-15]
 
 _What's new?_
