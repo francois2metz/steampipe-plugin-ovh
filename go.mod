@@ -3,7 +3,7 @@ module github.com/francois2metz/steampipe-plugin-ovh
 go 1.21
 
 require (
-	github.com/ovh/go-ovh v1.3.0
+	github.com/ovh/go-ovh v1.4.3
 	github.com/turbot/steampipe-plugin-sdk/v5 v5.6.2
 )
 
@@ -110,7 +110,7 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230711160842-782d3b101e98 // indirect
 	google.golang.org/grpc v1.58.2 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
-	gopkg.in/ini.v1 v1.57.0 // indirect
+	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/tomb.v2 v2.0.0-20161208151619-d5d1b5820637 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
