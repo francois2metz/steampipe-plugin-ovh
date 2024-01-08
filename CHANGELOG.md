@@ -1,3 +1,10 @@
+## v0.7.0 [2024-01-08]
+
+_What's new?_
+
+- Add `ovh_cloud_volume_snapshot` table. Thanks [@jdenoy](https://github.com/jdenoy).
+- Update SDK to v5.8.0
+
 ## v0.6.0 [2023-10-15]
 
 _What's new?_
