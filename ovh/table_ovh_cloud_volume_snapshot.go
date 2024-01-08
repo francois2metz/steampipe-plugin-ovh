@@ -13,7 +13,7 @@ import (
 func tableOvhCloudVolumeSnapshot() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_volume_snapshot",
-		Description: "A volume is an independent additional disk.",
+		Description: "A volume snapshot a copy of the state of a storage volume at a particular point in time.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listVolumeSnapshot,
@@ -32,12 +32,12 @@ func tableOvhCloudVolumeSnapshot() *plugin.Table {
 			{
 				Name:        "id",
 				Type:        proto.ColumnType_STRING,
-				Description: "ID.",
+				Description: "Volume Snapshot ID.",
 			},
 			{
 				Name:        "creationDate",
 				Type:        proto.ColumnType_TIMESTAMP,
-				Description: "Volume creation date.",
+				Description: "Volume Snapshot creation date.",
 				Transform:   transform.FromField("CreationDate"),
 			},
 			{
@@ -48,7 +48,7 @@ func tableOvhCloudVolumeSnapshot() *plugin.Table {
 			{
 				Name:        "description",
 				Type:        proto.ColumnType_STRING,
-				Description: "Volume Snapshot Description",
+				Description: "Volume Snapshot Description.",
 			},
 			{
 				Name:        "size",
@@ -58,7 +58,7 @@ func tableOvhCloudVolumeSnapshot() *plugin.Table {
 			{
 				Name:        "volumeId",
 				Type:        proto.ColumnType_STRING,
-				Description: "Volume Snapshot ID.",
+				Description: "Volume Snapshot Source ID.",
 				Transform:   transform.FromField("VolumeId"),
 			},
 			{
@@ -69,12 +69,12 @@ func tableOvhCloudVolumeSnapshot() *plugin.Table {
 			{
 				Name:        "status",
 				Type:        proto.ColumnType_STRING,
-				Description: "Volume Snapshot Status. (available, creating, deleting, error, error_deleting)",
+				Description: "Volume Snapshot Status. (available, creating, deleting, error, error_deleting).",
 			},
 			{
 				Name:        "planCode",
 				Type:        proto.ColumnType_STRING,
-				Description: "Volume Snapshot Plan Code",
+				Description: "Volume Snapshot Plan Code.",
 			},
 		},
 	}
