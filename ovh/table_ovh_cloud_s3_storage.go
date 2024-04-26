@@ -67,7 +67,7 @@ func tableOvhCloudS3Storage() *plugin.Table {
 				Transform:   transform.FromField("Created_Date"),
 			},
 			{
-				Name:        "sse_algorithm",
+				Name:        "encryption_sse_algorithm",
 				Type:        proto.ColumnType_STRING,
 				Description: "Encryption configuration.",
 				Transform:   transform.FromField("Encryption.SSEAlgorithm"),
