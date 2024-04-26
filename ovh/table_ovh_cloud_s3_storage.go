@@ -83,7 +83,7 @@ type S3StorageContainer struct {
 	ObjectsCount int                          `json:"objectsCount"`
 	ObjectsSize  int                          `json:"objectsSize"`
 	Region       string                       `json:"region"`
-	Created_Date time.Time                    `json:"createdAt"`
+	CreatedAt time.Time                    `json:"createdAt"`
 	Encryption   S3StorageContainerEncryption `json:"encryption"`
 }
 type S3StorageContainerEncryption struct {
