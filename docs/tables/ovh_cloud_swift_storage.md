@@ -1,12 +1,12 @@
 # Table: ovh_cloud_swift_storage
 
-A Swift storage is an object storage similar to S3.
+A Swift storage is an object storage.
 
 The `ovh_cloud_swift_storage` table can be used to query information about storage containers and **you must specify which cloud project** in the where or join clause (`where project_id=`, `join ovh_cloud_project on id=`).
 
 ## Examples
 
-### List storage containers of a cloud project
+### List swift storage containers of a cloud project
 
 ```sql
 select
@@ -18,7 +18,7 @@ where
   project_id='27c5a6d3dfez87893jfd88fdsfmvnqb8'
 ```
 
-## List empty storage containers
+## List empty swift storage containers
 
 ```sql
 select
