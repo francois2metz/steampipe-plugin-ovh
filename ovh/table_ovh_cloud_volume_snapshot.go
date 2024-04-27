@@ -83,7 +83,7 @@ func tableOvhCloudVolumeSnapshot() *plugin.Table {
 type VolumeSnapShot struct {
 	ID           string    `json:"id"`
 	CreationDate time.Time `json:"creationDate"`
-	Name	     string    `json:"name"`
+	Name         string    `json:"name"`
 	Description  string    `json:"description"`
 	Size         int       `json:"size"`
 	VolumeId     string    `json:"volumeId"`
