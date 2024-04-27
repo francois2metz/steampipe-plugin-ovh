@@ -9,17 +9,17 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableOvhCloudStorage() *plugin.Table {
+func tableOvhCloudSwiftStorage() *plugin.Table {
 	return &plugin.Table{
-		Name:        "ovh_cloud_storage",
-		Description: "A storage is an object storage similar to S3.",
+		Name:        "ovh_cloud_swift_storage",
+		Description: "A Swift storage is an object storage similar to S3.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
-			Hydrate:    listStorageContainer,
+			Hydrate:    listSwiftStorageContainer,
 		},
 		Get: &plugin.GetConfig{
 			KeyColumns: plugin.AllColumns([]string{"project_id", "id"}),
-			Hydrate:    getStorageContainer,
+			Hydrate:    getSwiftStorageContainer,
 		},
 		Columns: []*plugin.Column{
 			{
@@ -57,7 +57,7 @@ func tableOvhCloudStorage() *plugin.Table {
 	}
 }
 
-type StorageContainer struct {
+type SwiftStorageContainer struct {
 	ID            string `json:"id"`
 	Name          string `json:"name"`
 	StoredObjects int    `json:"storedObjects"`
@@ -65,17 +65,17 @@ type StorageContainer struct {
 	Region        string `json:"region"`
 }
 
-func listStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
+func listSwiftStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_cloud_storage.listStorageContainer", "connection_error", err)
+		plugin.Logger(ctx).Error("ovh_cloud_swift_storage.listSwiftStorageContainer", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.EqualsQuals["project_id"].GetStringValue()
-	var containers []StorageContainer
+	var containers []SwiftStorageContainer
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/storage", projectId), &containers)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_cloud_storage.listStorageContainer", err)
+		plugin.Logger(ctx).Error("ovh_cloud_swift_storage.listSwiftStorageContainer", err)
 		return nil, err
 	}
 	for _, container := range containers {
@@ -84,18 +84,18 @@ func listStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.Hy
 	return nil, nil
 }
 
-func getStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
+func getSwiftStorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_cloud_storage.getStorageContainer", "connection_error", err)
+		plugin.Logger(ctx).Error("ovh_cloud_swift_storage.getSwiftStorageContainer", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.EqualsQuals["project_id"].GetStringValue()
 	id := d.EqualsQuals["id"].GetStringValue()
-	var container StorageContainer
+	var container SwiftStorageContainer
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/storage/%s", projectId, id), &container)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_cloud_storage.getStorageContainer", err)
+		plugin.Logger(ctx).Error("ovh_cloud_swift_storage.getSwiftStorageContainer", err)
 		return nil, err
 	}
 	container.ID = id
