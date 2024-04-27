@@ -12,7 +12,7 @@ import (
 func tableOvhCloudRegion() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_cloud_region",
-		Description: "Cloud regions.",
+		Description: "Regions available for a cloud project.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.SingleColumn("project_id"),
 			Hydrate:    listRegion,
