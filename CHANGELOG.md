@@ -1,3 +1,12 @@
+## v0.8.0 [2024-04-27]
+
+_What's new?_
+
+- Renamed `ovh_cloud_storage` table to `ovh_cloud_storage_swift`. Thanks [@jdenoy](https://github.com/jdenoy).
+- Add `ovh_cloud_storage_s3` table. Thanks [@jdenoy](https://github.com/jdenoy).
+- Add `ovh_cloud_region` table.
+- Update SDK to v5.9.0
+
 ## v0.7.0 [2024-01-08]
 
 _What's new?_
