@@ -1,8 +1,8 @@
-# Table: ovh_cloud_s3_storage
+# Table: ovh_cloud_storage_s3
 
 An S3 storage is an S3 object storage.
 
-The `ovh_cloud_s3_storage` table can be used to query information about storage containers and **you must specify which cloud project AND region** in the where clause (`where project_id=xxxx and region=xxxx`).
+The `ovh_cloud_storage_s3` table can be used to query information about storage containers and **you must specify which cloud project AND region** in the where clause (`where project_id=xxxx and region=xxxx`).
 
 ## Examples
 
@@ -15,7 +15,7 @@ select
   objects_count,
   objects_size
 from
-  ovh_cloud_s3_storage
+  ovh_cloud_storage_s3
 where
   project_id='27c5a6d3dfez87893jfd88fdsfmvnqb8'
   and region='GRA'
@@ -30,7 +30,7 @@ select
   objects_count,
   objects_size
 from
-  ovh_cloud_s3_storage
+  ovh_cloud_storage_s3
 where
   project_id='27c5a6d3dfez87893jfd88fdsfmvnqb8'
   and region='GRA'

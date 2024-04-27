@@ -10,9 +10,9 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableOvhCloudS3Storage() *plugin.Table {
+func tableOvhCloudStorageS3() *plugin.Table {
 	return &plugin.Table{
-		Name:        "ovh_cloud_s3_storage",
+		Name:        "ovh_cloud_storage_s3",
 		Description: "A S3 storage is an object storage.",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.AllColumns([]string{"project_id", "region"}),
@@ -91,7 +91,7 @@ type S3StorageContainerEncryption struct {
 func listS3StorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_cloud_s3_storage.listS3StorageContainer", "connection_error", err)
+		plugin.Logger(ctx).Error("ovh_cloud_storage_s3.listS3StorageContainer", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.EqualsQuals["project_id"].GetStringValue()
@@ -100,7 +100,7 @@ func listS3StorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.
 	var containers []S3StorageContainer
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/region/%s/storage", projectId, region), &containers)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_cloud_s3_storage.listS3StorageContainer", err)
+		plugin.Logger(ctx).Error("ovh_cloud_storage_s3.listS3StorageContainer", err)
 		return nil, err
 	}
 	for _, container := range containers {
@@ -112,7 +112,7 @@ func listS3StorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.
 func getS3StorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_cloud_s3_storage.getS3StorageContainer", "connection_error", err)
+		plugin.Logger(ctx).Error("ovh_cloud_storage_s3.getS3StorageContainer", "connection_error", err)
 		return nil, err
 	}
 	projectId := d.EqualsQuals["project_id"].GetStringValue()
@@ -121,7 +121,7 @@ func getS3StorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.H
 	var container S3StorageContainer
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/region/%s/storage/%s", projectId, region, name), &container)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_cloud_s3_storage.getS3StorageContainer", err)
+		plugin.Logger(ctx).Error("ovh_cloud_storage_s3.getS3StorageContainer", err)
 		return nil, err
 	}
 	return container, nil
