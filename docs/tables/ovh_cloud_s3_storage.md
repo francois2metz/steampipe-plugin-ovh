@@ -10,7 +10,10 @@ The `ovh_cloud_s3_storage` table can be used to query information about storage 
 
 ```sql
 select
-  name,owner_id,objects_count,objects_size
+  name,
+  owner_id,
+  objects_count,
+  objects_size
 from
   ovh_cloud_s3_storage
 where
@@ -22,10 +25,14 @@ where
 
 ```sql
 select
-  name,owner_id,objects_count,objects_size
+  name,
+  owner_id,
+  objects_count,
+  objects_size
 from
   ovh_cloud_s3_storage
 where
   project_id='27c5a6d3dfez87893jfd88fdsfmvnqb8'
-  and region='GRA' and name='databucket'
+  and region='GRA'
+  and name='databucket'
 ```

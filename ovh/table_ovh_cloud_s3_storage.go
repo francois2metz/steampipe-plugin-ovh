@@ -43,7 +43,6 @@ func tableOvhCloudS3Storage() *plugin.Table {
 				Name:        "owner_id",
 				Type:        proto.ColumnType_INT,
 				Description: "Container owner userID.",
-				Transform:   transform.FromField("OwnerId"),
 			},
 			{
 				Name:        "objects_count",
@@ -64,7 +63,6 @@ func tableOvhCloudS3Storage() *plugin.Table {
 				Name:        "created_at",
 				Type:        proto.ColumnType_TIMESTAMP,
 				Description: "The date and timestamp when the resource was created.",
-				Transform:   transform.FromField("Created_Date"),
 			},
 			{
 				Name:        "encryption_sse_algorithm",
@@ -79,11 +77,11 @@ func tableOvhCloudS3Storage() *plugin.Table {
 type S3StorageContainer struct {
 	Name         string                       `json:"name"`
 	VirtualHost  string                       `json:"virtualHost"`
-	OwnerId      int                          `json:"ownerId"`
+	OwnerID      int                          `json:"ownerId"`
 	ObjectsCount int                          `json:"objectsCount"`
 	ObjectsSize  int                          `json:"objectsSize"`
 	Region       string                       `json:"region"`
-	CreatedAt time.Time                    `json:"createdAt"`
+	CreatedAt    time.Time                    `json:"createdAt"`
 	Encryption   S3StorageContainerEncryption `json:"encryption"`
 }
 type S3StorageContainerEncryption struct {
