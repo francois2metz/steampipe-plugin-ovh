@@ -124,6 +124,5 @@ func getS3StorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.H
 		plugin.Logger(ctx).Error("ovh_cloud_s3_storage.getS3StorageContainer", err)
 		return nil, err
 	}
-	//container.ID = id
 	return container, nil
 }
