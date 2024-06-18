@@ -34,6 +34,8 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 			"ovh_cloud_storage_swift":   tableOvhCloudStorageSwift(),
 			"ovh_cloud_volume":          tableOvhCloudVolume(),
 			"ovh_cloud_volume_snapshot": tableOvhCloudVolumeSnapshot(),
+			"ovh_refund":                tableOvhRefund(),
+			"ovh_refund_detail":         tableOvhRefundDetails(),
 		},
 	}
 	return p
