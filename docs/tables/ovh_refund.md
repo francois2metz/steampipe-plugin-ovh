@@ -18,7 +18,7 @@ from
   ovh_refund;
 ```
 
-### Get a bill
+### Get a refund
 
 ```sql
 select
