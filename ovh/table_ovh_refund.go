@@ -54,14 +54,14 @@ func tableOvhRefund() *plugin.Table {
 				Hydrate:     getRefundInfo,
 				Type:        proto.ColumnType_STRING,
 				Transform:   transform.FromField("Url"),
-				Description: "URL to download the bill.",
+				Description: "URL to download the refund document.",
 			},
 			{
 				Name:        "pdf_url",
 				Hydrate:     getRefundInfo,
 				Type:        proto.ColumnType_STRING,
 				Transform:   transform.FromField("PdfUrl"),
-				Description: "URL to download the bill in PDF format (maybe same as url field).",
+				Description: "URL to download the refund document in PDF format (maybe same as url field).",
 			},
 			{
 				Name:        "order_id",
@@ -81,7 +81,7 @@ func tableOvhRefund() *plugin.Table {
 				Name:        "password",
 				Hydrate:     getRefundInfo,
 				Type:        proto.ColumnType_STRING,
-				Description: "Password to download the bill.",
+				Description: "Password to download the refund document.",
 			},
 			{
 				Name:        "price_with_tax",
