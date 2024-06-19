@@ -39,7 +39,7 @@ func tableOvhRefundDetails() *plugin.Table {
 			{
 				Name:        "id",
 				Type:        proto.ColumnType_STRING,
-				Description: "ID of detail's bill.",
+				Description: "ID of detail's refund.",
 			},
 			{
 				Name:        "refund_id",
