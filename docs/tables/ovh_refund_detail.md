@@ -17,7 +17,7 @@ where
   refund_id = 'AFRxxxxxxx';
 ```
 
-### Get one detail of one refund
+### Get detail of one refund
 
 ```sql
 select
