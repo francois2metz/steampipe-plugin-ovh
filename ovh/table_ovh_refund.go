@@ -10,11 +10,6 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-// type RefundPrice struct {
-// 	Value        float64 `json:"value"`
-// 	CurrencyCode string  `json:"currencyCode"`
-// }
-
 type Refund struct {
 	ID              string    `json:"refundId"`
 	Date            time.Time `json:"date"`
