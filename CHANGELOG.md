@@ -1,3 +1,10 @@
+## v0.9.0 [2024-06-20]
+
+_What's new?_
+
+- Add `ovh_refund` and `ovh_refund_detail` tables. Thanks [@jdenoy](https://github.com/jdenoy).
+- Update SDK to v5.10.1
+
 ## v0.8.0 [2024-04-27]
 
 _What's new?_
