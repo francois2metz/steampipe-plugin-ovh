@@ -1,12 +1,12 @@
 module github.com/francois2metz/steampipe-plugin-ovh
 
-go 1.21.0
+go 1.22.4
 
-toolchain go1.21.3
+toolchain go1.22.6
 
 require (
 	github.com/ovh/go-ovh v1.6.0
-	github.com/turbot/steampipe-plugin-sdk/v5 v5.10.2
+	github.com/turbot/steampipe-plugin-sdk/v5 v5.10.3
 )
 
 require (
