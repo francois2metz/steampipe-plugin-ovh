@@ -36,6 +36,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 			"ovh_cloud_volume_snapshot": tableOvhCloudVolumeSnapshot(),
 			"ovh_refund":                tableOvhRefund(),
 			"ovh_refund_detail":         tableOvhRefundDetails(),
+			"ovh_log_self":              tableOvhLog(),
 		},
 	}
 	return p
