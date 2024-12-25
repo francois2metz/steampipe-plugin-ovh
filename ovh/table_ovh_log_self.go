@@ -4,18 +4,18 @@ import (
 	"context"
 	"fmt"
 	"time"
+	"strconv"
 
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
-	// "github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 type Log struct {
-	ID              string    `json:"logId"`
+	ID              int       `json:"logId"`
 	Date            time.Time `json:"date"`
 	Account         string    `json:"account"`
 	IP              string 	  `json:"ip"`
-	Method          string    `json:"method"` // more of an enum really
+	Method          string    `json:"method"`
 	Route           string    `json:"route"`
 	Path            string    `json:"path"`
 }
@@ -50,7 +50,6 @@ func tableOvhLog() *plugin.Table {
 				Name:        "account",
 				Hydrate:     getLogInfo,
 				Type:        proto.ColumnType_STRING,
-				// Transform:   transform.FromField("Url"),
 				Description: "User performing the action.",
 			},
 			{
@@ -90,7 +89,7 @@ func getLogInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 		return nil, err
 	}
 
-	err = client.Get(fmt.Sprintf("/me/api/logs/self/%s", log.ID), &log)
+	err = client.Get(fmt.Sprintf("/me/api/logs/self/%s", strconv.Itoa(log.ID)), &log)
 
 	if err != nil {
 		plugin.Logger(ctx).Error("ovh_logs_self.getLogInfo", err)
@@ -107,7 +106,7 @@ func listLog(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (i
 		return nil, err
 	}
 
-	var logsId []string
+	var logsId []int
 	err = client.Get("/me/api/logs/self", &logsId)
 
 	if err != nil {
@@ -125,8 +124,12 @@ func listLog(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (i
 }
 
 func getLog(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
-	id := d.Quals.ToEqualsQualValueMap()["id"].GetStringValue()
+	strId := d.Quals.ToEqualsQualValueMap()["id"].GetStringValue()
 	var log Log
-	log.ID = id
+	intId, err := strconv.Atoi(strId)
+	if err != nil {
+		return nil, err
+	}
+	log.ID = intId
 	return log, nil
 }
