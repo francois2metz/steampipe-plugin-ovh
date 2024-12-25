@@ -1,8 +1,8 @@
 # Table: ovh_log_self
 
-List of all the logs from your account.
+Get the logs from recent API calls made from your account.
 
-The `ovh_log_self` table can be used to query information about your billing information.
+The `ovh_log_self` table can be used to query information about your recent API calls.
 
 ## Examples
 
