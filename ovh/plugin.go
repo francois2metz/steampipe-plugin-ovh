@@ -17,7 +17,6 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 		},
 		TableMap: map[string]*plugin.Table{
 			"ovh_bill":                  tableOvhBill(),
-			"ovh_log_self":              tableOvhLog(),
 			"ovh_bill_detail":           tableOvhBillDetails(),
 			"ovh_cloud_ai_app":          tableOvhCloudAIApp(),
 			"ovh_cloud_ai_job":          tableOvhCloudAIJob(),
@@ -35,6 +34,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 			"ovh_cloud_storage_swift":   tableOvhCloudStorageSwift(),
 			"ovh_cloud_volume":          tableOvhCloudVolume(),
 			"ovh_cloud_volume_snapshot": tableOvhCloudVolumeSnapshot(),
+			"ovh_log_self":              tableOvhLog(),
 			"ovh_refund":                tableOvhRefund(),
 			"ovh_refund_detail":         tableOvhRefundDetails(),
 		},
