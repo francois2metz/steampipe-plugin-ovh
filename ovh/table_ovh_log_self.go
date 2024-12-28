@@ -3,21 +3,21 @@ package ovh
 import (
 	"context"
 	"fmt"
-	"time"
 	"strconv"
+	"time"
 
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 )
 
 type Log struct {
-	ID              int       `json:"logId"`
-	Date            time.Time `json:"date"`
-	Account         string    `json:"account"`
-	IP              string 	  `json:"ip"`
-	Method          string    `json:"method"`
-	Route           string    `json:"route"`
-	Path            string    `json:"path"`
+	ID      int       `json:"logId"`
+	Date    time.Time `json:"date"`
+	Account string    `json:"account"`
+	IP      string    `json:"ip"`
+	Method  string    `json:"method"`
+	Route   string    `json:"route"`
+	Path    string    `json:"path"`
 }
 
 func tableOvhLog() *plugin.Table {
