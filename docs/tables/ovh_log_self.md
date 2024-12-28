@@ -12,7 +12,7 @@ The `ovh_log_self` table can be used to query information about your recent API 
 select
   id,
   date,
-  acount
+  account
 from
   ovh_log_self;
 ```
