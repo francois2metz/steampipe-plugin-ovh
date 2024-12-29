@@ -89,7 +89,7 @@ func getLogInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 		return nil, err
 	}
 
-	err = client.Get(fmt.Sprintf("/me/api/logs/self/%s", strconv.Itoa(log.ID)), &log)
+	err = client.Get(fmt.Sprintf("/me/api/logs/self/%d", log.ID), &log)
 
 	if err != nil {
 		plugin.Logger(ctx).Error("ovh_logs_self.getLogInfo", err)
