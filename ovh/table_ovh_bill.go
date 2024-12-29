@@ -156,7 +156,7 @@ func listBill(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (
 }
 
 func getBill(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
-	id := d.Quals.ToEqualsQualValueMap()["id"].GetStringValue()
+	id := d.EqualsQuals["id"].GetStringValue()
 	var bill Bill
 	bill.ID = id
 	return bill, nil
