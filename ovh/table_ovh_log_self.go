@@ -124,7 +124,7 @@ func listLog(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (i
 }
 
 func getLog(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
-	strId := d.Quals.ToEqualsQualValueMap()["id"].GetStringValue()
+	strId := d.EqualsQuals["id"].GetStringValue()
 	var log Log
 	intId, err := strconv.Atoi(strId)
 	if err != nil {
