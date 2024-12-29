@@ -85,14 +85,14 @@ func getLogInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 
 	client, err := connect(ctx, d)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_logs_self.getLogInfo", "connection_error", err)
+		plugin.Logger(ctx).Error("ovh_log_self.getLogInfo", "connection_error", err)
 		return nil, err
 	}
 
 	err = client.Get(fmt.Sprintf("/me/api/logs/self/%d", log.ID), &log)
 
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_logs_self.getLogInfo", err)
+		plugin.Logger(ctx).Error("ovh_log_self.getLogInfo", err)
 		return nil, err
 	}
 
@@ -102,7 +102,7 @@ func getLogInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 func listLog(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	client, err := connect(ctx, d)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_logs_self.listLog", "connection_error", err)
+		plugin.Logger(ctx).Error("ovh_log_self.listLog", "connection_error", err)
 		return nil, err
 	}
 
@@ -110,7 +110,7 @@ func listLog(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (i
 	err = client.Get("/me/api/logs/self", &logsId)
 
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_logs_self.listLog", err)
+		plugin.Logger(ctx).Error("ovh_log_self.listLog", err)
 		return nil, err
 	}
 
