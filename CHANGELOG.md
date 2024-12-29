@@ -1,3 +1,10 @@
+## v0.10.0 [2024-12-29]
+
+_What's new?_
+
+- Add `ovh_log_self` table. Thanks [@romain-pix-cyber](https://github.com/romain-pix-cyber).
+- Update SDK to v5.11.0
+
 ## v0.9.0 [2024-06-20]
 
 _What's new?_
