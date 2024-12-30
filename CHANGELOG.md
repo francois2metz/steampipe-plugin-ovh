@@ -1,3 +1,9 @@
+## v0.10.1 [2024-12-30]
+
+_What's new?_
+
+- Fix `ovh_log_self` log messages and avoid int to string conversion.
+
 ## v0.10.0 [2024-12-29]
 
 _What's new?_
