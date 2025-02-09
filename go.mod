@@ -5,7 +5,7 @@ go 1.22.4
 toolchain go1.22.6
 
 require (
-	github.com/ovh/go-ovh v1.6.0
+	github.com/ovh/go-ovh v1.7.0
 	github.com/turbot/steampipe-plugin-sdk/v5 v5.11.2
 )
 
