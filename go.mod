@@ -2,7 +2,7 @@ module github.com/francois2metz/steampipe-plugin-ovh
 
 go 1.22.4
 
-toolchain go1.22.6
+toolchain go1.24.0
 
 require (
 	github.com/ovh/go-ovh v1.7.0
