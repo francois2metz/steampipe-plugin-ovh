@@ -1,3 +1,10 @@
+## v0.11.0 [2025-03-01]
+
+_What's new?_
+
+- Update go to 1.23
+- Update steampipe sdk to 5.11.3
+
 ## v0.10.1 [2024-12-30]
 
 _What's new?_
