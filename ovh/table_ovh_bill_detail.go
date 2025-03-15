@@ -49,46 +49,46 @@ func tableOvhBillDetails() *plugin.Table {
 			},
 			{
 				Name:        "description",
-				Hydrate:     getGetBillDetailInfo,
+				Hydrate:     getBillDetailInfo,
 				Type:        proto.ColumnType_STRING,
 				Description: "Description of detail.",
 			},
 			{
 				Name:        "domain",
-				Hydrate:     getGetBillDetailInfo,
+				Hydrate:     getBillDetailInfo,
 				Type:        proto.ColumnType_STRING,
 				Description: "Domain.",
 			},
 			{
 				Name:        "period_start",
 				Transform:   transform.FromP(convertBillDetailDate, "PeriodStart"),
-				Hydrate:     getGetBillDetailInfo,
+				Hydrate:     getBillDetailInfo,
 				Type:        proto.ColumnType_TIMESTAMP,
 				Description: "Period start of the product detail.",
 			},
 			{
 				Name:        "period_end",
 				Transform:   transform.FromP(convertBillDetailDate, "PeriodEnd"),
-				Hydrate:     getGetBillDetailInfo,
+				Hydrate:     getBillDetailInfo,
 				Type:        proto.ColumnType_TIMESTAMP,
 				Description: "Period end of the product detail.",
 			},
 			{
 				Name:        "quantity",
-				Hydrate:     getGetBillDetailInfo,
+				Hydrate:     getBillDetailInfo,
 				Type:        proto.ColumnType_STRING,
 				Description: "Quantity of detail.",
 			},
 			{
 				Name:        "total_price",
-				Hydrate:     getGetBillDetailInfo,
+				Hydrate:     getBillDetailInfo,
 				Type:        proto.ColumnType_DOUBLE,
 				Transform:   transform.FromField("TotalPrice.Value"),
 				Description: "Total price of this detail.",
 			},
 			{
 				Name:        "unit_price",
-				Hydrate:     getGetBillDetailInfo,
+				Hydrate:     getBillDetailInfo,
 				Type:        proto.ColumnType_DOUBLE,
 				Transform:   transform.FromField("UnitPrice.Value"),
 				Description: "Unit price of this detail.",
@@ -111,20 +111,20 @@ func convertBillDetailDate(ctx context.Context, d *transform.TransformData) (int
 }
 
 // This function populate data of bill detail
-func getGetBillDetailInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+func getBillDetailInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
 	billDetail := h.Item.(BillDetail)
 
 	client, err := connect(ctx, d)
 
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_bill_detail.getGetBillDetailInfo", "connection_error", err)
+		plugin.Logger(ctx).Error("ovh_bill_detail.getBillDetailInfo", "connection_error", err)
 		return nil, err
 	}
 
 	err = client.Get(fmt.Sprintf("/me/bill/%s/details/%s", billDetail.BillID, billDetail.ID), &billDetail)
 
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_bill_detail.getGetBillDetailInfo", err)
+		plugin.Logger(ctx).Error("ovh_bill_detail.getBillDetailInfo", err)
 		return nil, err
 	}
 
@@ -168,5 +168,5 @@ func getBillingDetail(ctx context.Context, d *plugin.QueryData, h *plugin.Hydrat
 		BillID: billId,
 	}
 
-	return getGetBillDetailInfo(ctx, d, h)
+	return getBillDetailInfo(ctx, d, h)
 }
