@@ -86,22 +86,37 @@ func tableOvhCloudProject() *plugin.Table {
 				Transform:   transform.FromField("CreationDate"),
 				Description: "Project creation date.",
 			},
+			{
+				Name:        "iam",
+				Hydrate:     getProjectInfo,
+				Type:        proto.ColumnType_JSON,
+				Transform:   transform.FromField("IAM"),
+				Description: "IAM resource metadata.",
+			},
 		},
 	}
 }
 
+type IAMResourceMetadata struct {
+	ID          string            `json:"id,omitempty"`
+	URN         string            `json:"urn,omitempty"`
+	DisplayName string            `json:"displayName,omitempty"`
+	Tags        map[string]string `json:"tags,omitempty"`
+}
+
 type Project struct {
-	ID           string     `json:"project_id"`
-	Name         string     `json:"projectName"`
-	Description  string     `json:"description"`
-	PlanCode     string     `json:"planCode"`
-	Unleash      *bool      `json:"unleash"`
-	Expiration   *time.Time `json:"expiration,omitempty"`
-	CreationDate time.Time  `json:"creationDate"`
-	OrderId      int        `json:"orderId"`
-	Access       string     `json:"access"`
-	Status       string     `json:"status"`
-	ManualQuota  *bool      `json:"manualQuota"`
+	ID           string               `json:"project_id"`
+	Name         string               `json:"projectName"`
+	Description  string               `json:"description"`
+	PlanCode     string               `json:"planCode"`
+	Unleash      *bool                `json:"unleash"`
+	Expiration   *time.Time           `json:"expiration,omitempty"`
+	CreationDate time.Time            `json:"creationDate"`
+	OrderId      int                  `json:"orderId"`
+	Access       string               `json:"access"`
+	Status       string               `json:"status"`
+	ManualQuota  *bool                `json:"manualQuota"`
+	IAM          *IAMResourceMetadata `json:"iam,omitempty"`
 }
 
 func getProjectInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
