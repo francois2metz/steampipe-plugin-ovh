@@ -73,8 +73,51 @@ connection "ovh" {
     # 'kimsufi-eu' for Kimsufi Europe API
     # 'kimsufi-ca' for Kimsufi Canada API
     endpoint = "ovh-eu"
+
+    # List of regions to query. Supports wildcards.
+    # Defaults to all regions if not specified.
+    # regions = ["GRA", "SBG", "BHS"]
 }
 ```
+
+- `application_key` - Your OVH application key. Can also be set with the `OVH_APPLICATION_KEY` environment variable.
+- `application_secret` - Your OVH application secret. Can also be set with the `OVH_APPLICATION_SECRET` environment variable.
+- `consumer_key` - Your OVH consumer key. Can also be set with the `OVH_CONSUMER_KEY` environment variable.
+- `endpoint` - The OVH API endpoint to use. Can also be set with the `OVH_ENDPOINT` environment variable.
+- `regions` (Optional) - A list of regions to query. Supports wildcards (e.g., `GRA*` matches `GRA`, `GRA9`, etc.). If not specified, all regions will be queried. This can significantly improve query performance when you only need data from specific regions.
+
+### Regions
+
+The `regions` configuration parameter allows you to limit queries to specific OVH regions, which can significantly improve performance by reducing the number of API calls.
+
+**Examples:**
+
+Query a single region:
+```hcl
+regions = ["GRA"]
+```
+
+Query multiple specific regions:
+```hcl
+regions = ["GRA", "SBG", "BHS"]
+```
+
+Query all regions in a location using wildcards:
+```hcl
+regions = ["GRA*"]  # Matches GRA, GRA9, etc.
+```
+
+Query multiple locations:
+```hcl
+regions = ["GRA", "SBG", "BHS"]
+```
+
+Query all regions (default behavior):
+```hcl
+regions = ["*"]
+```
+
+**Note:** When `regions` is not specified in the configuration, it defaults to `["*"]` which queries all available regions.
 
 ## Get Involved
 
