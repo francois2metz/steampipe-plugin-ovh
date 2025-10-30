@@ -107,6 +107,80 @@ func RegionMatrix(serviceNames ...string) func(context.Context, *plugin.QueryDat
 			return []map[string]interface{}{}
 		}
 
+		// Check if specific regions are provided in the query using UnsafeQuals
+		// This allows us to access region filters without making region a key column
+		var specificRegions []string
+		if d.QueryContext != nil && d.QueryContext.UnsafeQuals != nil {
+			if qual, ok := d.QueryContext.UnsafeQuals["region"]; ok && qual != nil {
+				for _, qualValue := range qual.Quals {
+					// The SDK translates IN clauses into a qual with an '=' operator and a ListValue
+					if qualValue.GetStringValue() == "=" {
+						if listValue := qualValue.Value.GetListValue(); listValue != nil {
+							// This is an IN clause
+							for _, value := range listValue.Values {
+								specificRegions = append(specificRegions, value.GetStringValue())
+							}
+						} else {
+							// This is a simple '=' clause
+							specificRegions = append(specificRegions, qualValue.Value.GetStringValue())
+						}
+					}
+				}
+			}
+		}
+
+		if len(specificRegions) > 0 {
+			// We have one or more regions from the WHERE clause.
+			// Filter them against the connection config.
+			configuredRegions := ovhConfig.Regions
+			if len(configuredRegions) == 0 {
+				configuredRegions = []string{"*"}
+			}
+
+			var matrixRegions []string
+			for _, region := range specificRegions {
+				regionMatches := false
+				if len(configuredRegions) == 1 && configuredRegions[0] == "*" {
+					regionMatches = true
+				} else {
+					for _, pattern := range configuredRegions {
+						if matchRegionPattern(region, pattern) {
+							regionMatches = true
+							break
+						}
+					}
+				}
+				if regionMatches {
+					// avoid duplicates
+					isAlreadyInMatrix := false
+					for _, matrixRegion := range matrixRegions {
+						if matrixRegion == region {
+							isAlreadyInMatrix = true
+							break
+						}
+					}
+					if !isAlreadyInMatrix {
+						matrixRegions = append(matrixRegions, region)
+					}
+				}
+			}
+
+			if len(matrixRegions) > 0 {
+				plugin.Logger(ctx).Debug("ovh.RegionMatrix", "optimization", "specific_regions_in_query", "project_id", projectId, "regions", matrixRegions)
+				matrix := make([]map[string]interface{}, 0, len(matrixRegions))
+				for _, region := range matrixRegions {
+					matrix = append(matrix, map[string]interface{}{
+						"region": region,
+					})
+				}
+				return matrix
+			} else {
+				// No regions from the WHERE clause matched the config, return empty matrix
+				plugin.Logger(ctx).Debug("ovh.RegionMatrix", "optimization", "regions_filtered_by_config", "project_id", projectId, "queried_regions", specificRegions, "configured_regions", configuredRegions)
+				return []map[string]interface{}{}
+			}
+		}
+
 		// Get configured regions from config
 		configuredRegions := ovhConfig.Regions
 		if len(configuredRegions) == 0 {
