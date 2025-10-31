@@ -212,7 +212,7 @@ func listDedicatedServers(ctx context.Context, d *plugin.QueryData, _ *plugin.Hy
 	var serverNames []string
 	if err := client.Get("/dedicated/server", &serverNames); err != nil {
 		plugin.Logger(ctx).Error("ovh_dedicated_server.listDedicatedServers", "api_error", err)
-		return nil, fmt.Errorf("error calling OVH API: %v", err)
+		return nil, err
 	}
 
 	for _, serverName := range serverNames {
@@ -242,7 +242,7 @@ func getDedicatedServer(ctx context.Context, d *plugin.QueryData, h *plugin.Hydr
 	var server DedicatedServer
 	if err := client.Get(fmt.Sprintf("/dedicated/server/%s", serverName), &server); err != nil {
 		plugin.Logger(ctx).Error("ovh_dedicated_server.getDedicatedServer", "api_error", err)
-		return nil, fmt.Errorf("error calling OVH API: %v", err)
+		return nil, err
 	}
 
 	return server, nil
