@@ -3,7 +3,7 @@ package ovh
 import (
 	"context"
 	"fmt"
-	"time"
+	"strings"
 
 	"github.com/ovh/go-ovh/ovh"
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
@@ -11,23 +11,30 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
+// PlannedChange represents a change planned on a Savings Plan
+type PlannedChange struct {
+	PlannedOn  string                 `json:"plannedOn"`
+	Properties map[string]interface{} `json:"properties"`
+}
+
 // SavingsPlan represents an OVH Cloud Savings Plan
 type SavingsPlan struct {
-	ID              string     `json:"id"`
-	DisplayName     string     `json:"displayName"`
-	Status          string     `json:"status"`
-	Size            int        `json:"size"`
-	Flavour         string     `json:"flavour"`
-	Duration        string     `json:"duration"`
-	AutoRenew       bool       `json:"autoRenew"`
-	PeriodEndAction string     `json:"periodEndAction"`
-	StartDate       *time.Time `json:"startDate"`
-	EndDate         *time.Time `json:"endDate"`
-	Region          string     `json:"region"`
-	ProductCode     string     `json:"productCode"`
-	ServiceName     string     `json:"serviceName"`
-	ProjectID       string     `json:"-"` // Set by hydrate function
-	ServiceIDNum    int        `json:"-"` // Set by hydrate function
+	ID              string          `json:"id"`
+	DisplayName     string          `json:"displayName"`
+	Status          string          `json:"status"`
+	Size            int             `json:"size"`
+	Flavor          *string         `json:"flavor"`          // Optional field
+	Period          *string         `json:"period"`          // Optional field
+	OfferID         *string         `json:"offerId"`         // Optional field
+	PeriodEndAction *string         `json:"periodEndAction"` // Optional field
+	StartDate       *string         `json:"startDate"`       // Optional field
+	EndDate         *string         `json:"endDate"`         // Optional field
+	PeriodStartDate *string         `json:"periodStartDate"` // Optional field
+	PeriodEndDate   *string         `json:"periodEndDate"`   // Optional field
+	TerminationDate *string         `json:"terminationDate"` // Optional field - can be null
+	PlannedChanges  []PlannedChange `json:"plannedChanges"`  // Array of planned changes
+	ProjectID       string          `json:"-"`               // Set by hydrate function
+	ServiceIDNum    int             `json:"-"`               // Set by hydrate function
 }
 
 func tableOvhSavingsPlanSubscribed() *plugin.Table {
@@ -79,73 +86,86 @@ func tableOvhSavingsPlanSubscribed() *plugin.Table {
 				Description: "Number of resources covered by plan.",
 			},
 			{
-				Name:        "flavour",
+				Name:        "flavor",
 				Type:        proto.ColumnType_STRING,
-				Description: "Resource type or flavor.",
+				Transform:   transform.FromField("Flavor"),
+				Description: "Savings Plan flavor (resource type).",
 			},
 			{
-				Name:        "duration",
+				Name:        "period",
 				Type:        proto.ColumnType_STRING,
-				Description: "Commitment period (ISO-8601, e.g., P12M).",
+				Transform:   transform.FromField("Period"),
+				Description: "Periodicity of the Savings Plan (duration, e.g., P1Y).",
 			},
 			{
-				Name:        "auto_renewal",
-				Type:        proto.ColumnType_BOOL,
-				Transform:   transform.FromField("AutoRenew"),
-				Description: "Whether plan auto-renews.",
+				Name:        "offer_id",
+				Type:        proto.ColumnType_STRING,
+				Transform:   transform.FromField("OfferID"),
+				Description: "Savings Plan commercial offer identifier.",
 			},
 			{
 				Name:        "period_end_action",
 				Type:        proto.ColumnType_STRING,
 				Transform:   transform.FromField("PeriodEndAction"),
-				Description: "What happens at end of commitment (terminate or renew).",
+				Description: "Action performed when reaching the end of the period (REACTIVATE or TERMINATE).",
 			},
 			{
 				Name:        "start_date",
-				Type:        proto.ColumnType_TIMESTAMP,
+				Type:        proto.ColumnType_STRING,
 				Transform:   transform.FromField("StartDate"),
-				Description: "Plan start date.",
+				Description: "Start date of the Savings Plan.",
 			},
 			{
 				Name:        "end_date",
-				Type:        proto.ColumnType_TIMESTAMP,
+				Type:        proto.ColumnType_STRING,
 				Transform:   transform.FromField("EndDate"),
-				Description: "Plan end date.",
+				Description: "End date of the Savings Plan.",
 			},
 			{
-				Name:        "region",
+				Name:        "period_start_date",
 				Type:        proto.ColumnType_STRING,
-				Description: "Region (if applicable).",
+				Transform:   transform.FromField("PeriodStartDate"),
+				Description: "Start date of the current period.",
 			},
 			{
-				Name:        "product_code",
+				Name:        "period_end_date",
 				Type:        proto.ColumnType_STRING,
-				Transform:   transform.FromField("ProductCode"),
-				Description: "Internal plan code (compute_spot_1y, etc.).",
+				Transform:   transform.FromField("PeriodEndDate"),
+				Description: "End date of the current period.",
 			},
 			{
-				Name:        "linked_service_name",
+				Name:        "termination_date",
 				Type:        proto.ColumnType_STRING,
-				Transform:   transform.FromField("ServiceName"),
-				Description: "Friendly name of associated Public Cloud project.",
+				Transform:   transform.FromField("TerminationDate"),
+				Description: "Date at which the Savings Plan is scheduled to be terminated (null if not scheduled for termination).",
+			},
+			{
+				Name:        "planned_changes",
+				Type:        proto.ColumnType_JSON,
+				Transform:   transform.FromField("PlannedChanges"),
+				Description: "Changes planned on the Savings Plan.",
 			},
 		},
 	}
 }
 
-// getServiceIdFromProjectId converts a cloud project UUID to its numeric service ID
-func getServiceIdFromProjectId(ctx context.Context, client *ovh.Client, projectId string) (int, error) {
+// getServiceIDFromProjectID converts a cloud project UUID to its numeric service ID
+func getServiceIDFromProjectID(ctx context.Context, client *ovh.Client, projectID string) (int, error) {
 	type serviceInfo struct {
-		ServiceId int `json:"serviceId"`
+		ServiceID *int `json:"serviceId"`
 	}
 
 	var service serviceInfo
-	err := client.Get(fmt.Sprintf("/cloud/project/%s/serviceInfos", projectId), &service)
+	err := client.Get(fmt.Sprintf("/cloud/project/%s/serviceInfos", projectID), &service)
 	if err != nil {
-		return 0, fmt.Errorf("failed to get service ID for project %s: %w", projectId, err)
+		plugin.Logger(ctx).Error("ovh_savings_plan_subscribed.getServiceIDFromProjectID", err)
+		return 0, err
 	}
 
-	return service.ServiceId, nil
+	if service.ServiceID == nil {
+		return 0, fmt.Errorf("serviceId not found in response for project %s", projectID)
+	}
+	return *service.ServiceID, nil
 }
 
 func listOvhSavingsPlanSubscribed(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -158,29 +178,57 @@ func listOvhSavingsPlanSubscribed(ctx context.Context, d *plugin.QueryData, h *p
 	}
 
 	// Convert project ID to service ID
-	serviceID, err := getServiceIdFromProjectId(ctx, client, projectID)
+	serviceID, err := getServiceIDFromProjectID(ctx, client, projectID)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_savings_plan_subscribed.listOvhSavingsPlanSubscribed", "service_id_resolution_error", err)
-		return nil, err
+		return nil, nil // Return empty result for projects without savings plan support
 	}
 
-	// First get the list of savings plan IDs
-	var savingsPlanIDs []string
-	err = client.Get(fmt.Sprintf("/services/%d/savingsPlans/subscribed", serviceID), &savingsPlanIDs)
-	if err != nil {
-		plugin.Logger(ctx).Error("ovh_savings_plan_subscribed.listOvhSavingsPlanSubscribed", "api_error", err)
-		return nil, err
-	}
+	// OVH API can return either:
+	// 1. Empty array [] when no savings plans exist
+	// 2. Array of full objects [{...}] when savings plans exist
 
-	// Then get the details for each savings plan
-	for _, savingsPlanID := range savingsPlanIDs {
-		var savingsPlan SavingsPlan
-		err = client.Get(fmt.Sprintf("/services/%d/savingsPlans/subscribed/%s", serviceID, savingsPlanID), &savingsPlan)
-		if err != nil {
-			plugin.Logger(ctx).Error("ovh_savings_plan_subscribed.listOvhSavingsPlanSubscribed", "api_error", err, "savings_plan_id", savingsPlanID)
-			continue // Skip this savings plan and continue with others
+	// First try to get as full objects (most common case when savings plans exist)
+	var savingsPlans []SavingsPlan
+	err = client.Get(fmt.Sprintf("/services/%d/savingsPlans/subscribed", serviceID), &savingsPlans)
+	if err != nil {
+		// If we get a JSON unmarshal error, it might be that the API returned string IDs instead of objects
+		if strings.Contains(err.Error(), "cannot unmarshal") {
+			// Try to get as string array (fallback)
+			var savingsPlanIDs []string
+			err2 := client.Get(fmt.Sprintf("/services/%d/savingsPlans/subscribed", serviceID), &savingsPlanIDs)
+			if err2 != nil {
+				plugin.Logger(ctx).Error("ovh_savings_plan_subscribed.listOvhSavingsPlanSubscribed", err2)
+				return nil, err2
+			}
+
+			// Get details for each savings plan ID
+			for _, savingsPlanID := range savingsPlanIDs {
+				var savingsPlan SavingsPlan
+				err3 := client.Get(fmt.Sprintf("/services/%d/savingsPlans/subscribed/%s", serviceID, savingsPlanID), &savingsPlan)
+				if err3 != nil {
+					plugin.Logger(ctx).Error("ovh_savings_plan_subscribed.listOvhSavingsPlanSubscribed", err3)
+					continue // Skip this savings plan and continue with others
+				}
+
+				// Set the project_id and service_id for the response
+				savingsPlan.ProjectID = projectID
+				savingsPlan.ServiceIDNum = serviceID
+
+				d.StreamListItem(ctx, savingsPlan)
+			}
+			return nil, nil
 		}
 
+		// If the API returns 404 or similar, it means no savings plans exist or the service doesn't support them
+		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "not found") {
+			return nil, nil // Return empty result instead of error
+		}
+		plugin.Logger(ctx).Error("ovh_savings_plan_subscribed.listOvhSavingsPlanSubscribed", err)
+		return nil, err
+	}
+
+	// Process the savings plans we got as full objects
+	for _, savingsPlan := range savingsPlans {
 		// Set the project_id and service_id for the response
 		savingsPlan.ProjectID = projectID
 		savingsPlan.ServiceIDNum = serviceID
@@ -202,16 +250,18 @@ func getOvhSavingsPlanSubscribed(ctx context.Context, d *plugin.QueryData, h *pl
 	}
 
 	// Convert project ID to service ID
-	serviceID, err := getServiceIdFromProjectId(ctx, client, projectID)
+	serviceID, err := getServiceIDFromProjectID(ctx, client, projectID)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_savings_plan_subscribed.getOvhSavingsPlanSubscribed", "service_id_resolution_error", err)
 		return nil, err
 	}
 
 	var savingsPlan SavingsPlan
 	err = client.Get(fmt.Sprintf("/services/%d/savingsPlans/subscribed/%s", serviceID, savingsPlanID), &savingsPlan)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_savings_plan_subscribed.getOvhSavingsPlanSubscribed", "api_error", err)
+		if strings.Contains(err.Error(), "404") || strings.Contains(err.Error(), "not found") {
+			return nil, nil
+		}
+		plugin.Logger(ctx).Error("ovh_savings_plan_subscribed.getOvhSavingsPlanSubscribed", err)
 		return nil, err
 	}
 
