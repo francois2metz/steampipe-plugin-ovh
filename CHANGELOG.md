@@ -1,3 +1,13 @@
+## v0.12.0 [2025-11-01]
+
+_What's new?_
+
+- Add `ovh_ceph` table. Thanks [@jdfresser](https://github.com/jdfresser).
+- Add `ovh_iam_resource` table. Thanks [@https://github.com/pdecat](https://github.com/pdecat).
+- add `iam` column to `ovh_cloud_project` table. Thanks [@https://github.com/pdecat](https://github.com/pdecat).
+- Update go to 1.24.
+- Update steampipe sdk to 5.13.1.
+
 ## v0.11.0 [2025-03-01]
 
 _What's new?_
