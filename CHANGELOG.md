@@ -3,8 +3,8 @@
 _What's new?_
 
 - Add `ovh_ceph` table. Thanks [@jdfresser](https://github.com/jdfresser).
-- Add `ovh_iam_resource` table. Thanks [@https://github.com/pdecat](https://github.com/pdecat).
-- add `iam` column to `ovh_cloud_project` table. Thanks [@https://github.com/pdecat](https://github.com/pdecat).
+- Add `ovh_iam_resource` table. Thanks [@pdecat](https://github.com/pdecat).
+- add `iam` column to `ovh_cloud_project` table. Thanks [@pdecat](https://github.com/pdecat).
 - Update go to 1.24.
 - Update steampipe sdk to 5.13.1.
 
