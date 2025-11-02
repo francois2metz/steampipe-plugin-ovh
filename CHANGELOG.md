@@ -1,3 +1,9 @@
+## v0.13.0 [2025-11-02]
+
+_What's new?_
+
+- Add `ovh_dedicated_server` table. Thanks [@tdannenmuller](https://github.com/tdannenmuller).
+
 ## v0.12.0 [2025-11-01]
 
 _What's new?_
