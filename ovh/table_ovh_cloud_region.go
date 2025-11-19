@@ -74,22 +74,6 @@ func tableOvhCloudRegion() *plugin.Table {
 
 }
 
-type Region struct {
-	Name               string      `json:"name"`
-	ContinentCode      string      `json:"continentCode"`
-	DatacenterLocation string      `json:"datacenterLocation"`
-	IpCountries        []string    `json:"ipCountries"`
-	Services           []Component `json:"services"`
-	Status             string      `json:"status"`
-	Type               string      `json:"type"`
-}
-
-type Component struct {
-	Endpoint string `json:"endpoint"`
-	Name     string `json:"name"`
-	Status   string `json:"status"`
-}
-
 func getRegionInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
 	region := h.Item.(Region)
 	projectId := d.EqualsQuals["project_id"].GetStringValue()
