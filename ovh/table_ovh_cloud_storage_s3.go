@@ -12,14 +12,17 @@ import (
 
 func tableOvhCloudStorageS3() *plugin.Table {
 	return &plugin.Table{
-		Name:        "ovh_cloud_storage_s3",
-		Description: "A S3 storage is an object storage.",
+		Name:              "ovh_cloud_storage_s3",
+		Description:       "A S3 storage is an object storage.",
+		GetMatrixItemFunc: RegionMatrix("storage-s3-standard", "storage-s3-high-perf"),
 		List: &plugin.ListConfig{
-			KeyColumns: plugin.AllColumns([]string{"project_id", "region"}),
-			Hydrate:    listS3StorageContainer,
+			KeyColumns: plugin.KeyColumnSlice{
+				{Name: "project_id", Require: plugin.Required},
+			},
+			Hydrate: listS3StorageContainer,
 		},
 		Get: &plugin.GetConfig{
-			KeyColumns: plugin.AllColumns([]string{"project_id", "region", "name"}),
+			KeyColumns: plugin.AllColumns([]string{"project_id", "name"}),
 			Hydrate:    getS3StorageContainer,
 		},
 		Columns: []*plugin.Column{
@@ -95,7 +98,7 @@ func listS3StorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.
 		return nil, err
 	}
 	projectId := d.EqualsQuals["project_id"].GetStringValue()
-	region := d.EqualsQuals["region"].GetStringValue()
+	region := d.EqualsQualString("region")
 
 	var containers []S3StorageContainer
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/region/%s/storage", projectId, region), &containers)
@@ -116,7 +119,7 @@ func getS3StorageContainer(ctx context.Context, d *plugin.QueryData, _ *plugin.H
 		return nil, err
 	}
 	projectId := d.EqualsQuals["project_id"].GetStringValue()
-	region := d.EqualsQuals["region"].GetStringValue()
+	region := d.EqualsQualString("region")
 	name := d.EqualsQuals["name"].GetStringValue()
 	var container S3StorageContainer
 	err = client.Get(fmt.Sprintf("/cloud/project/%s/region/%s/storage/%s", projectId, region, name), &container)
