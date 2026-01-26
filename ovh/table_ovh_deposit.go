@@ -12,14 +12,14 @@ import (
 )
 
 type Deposit struct {
-	DepositID   string     `json:"depositId"`
-	Amount      Price      `json:"amount"`
-	Date        time.Time  `json:"date"`
-	OrderID     *int       `json:"orderId"`
-	Url         string     `json:"url"`
-	PdfUrl      string     `json:"pdfUrl"`
-	Password    string     `json:"password"`
-	PaymentInfo *string    `json:"paymentInfo"`
+	DepositID   string      `json:"depositId"`
+	Amount      Price       `json:"amount"`
+	Date        time.Time   `json:"date"`
+	OrderID     *int        `json:"orderId"`
+	Url         string      `json:"url"`
+	PdfUrl      string      `json:"pdfUrl"`
+	Password    string      `json:"password"`
+	PaymentInfo interface{} `json:"paymentInfo"`
 }
 
 func tableOvhDeposit() *plugin.Table {
@@ -114,7 +114,7 @@ func getDepositInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateD
 
 	// Create a new deposit struct to hold the full response
 	var fullDeposit Deposit
-	
+
 	// Try the /me/deposit/{id}/details endpoint
 	err = client.Get(fmt.Sprintf("/me/deposit/%s/details", deposit.DepositID), &fullDeposit)
 

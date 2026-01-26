@@ -3,39 +3,45 @@ package ovh
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
+	ovhapi "github.com/ovh/go-ovh/ovh"
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 type DepositPaidBill struct {
-	DepositID              string     `json:"deposit_id"`
-	BillID                 string     `json:"billId"`
-	OrderID                int        `json:"orderId"`
-	PriceWithTax           Price      `json:"priceWithTax"`
-	PriceWithoutTax        Price      `json:"priceWithoutTax"`
-	Tax                    Price      `json:"tax"`
-	Date                   time.Time  `json:"date"`
-	Category               string     `json:"category"`
-	Url                    string     `json:"url"`
-	PdfUrl                 string     `json:"pdfUrl"`
-	Password               string     `json:"password"`
-	EInvoicingID           *string    `json:"eInvoicingId"`
-	EInvoicingStatus       *string    `json:"eInvoicingStatus"`
-	PaymentType            *string    `json:"paymentType"`
-	PaymentIdentifier      *string    `json:"paymentIdentifier"`
-	PaymentDate            *time.Time `json:"paymentDate"`
+	DepositID         string     `json:"deposit_id"`
+	DepositDate       time.Time  `json:"depositDate"`
+	BillID            string     `json:"billId"`
+	OrderID           int        `json:"orderId"`
+	PriceWithTax      Price      `json:"priceWithTax"`
+	PriceWithoutTax   Price      `json:"priceWithoutTax"`
+	Tax               Price      `json:"tax"`
+	Date              time.Time  `json:"date"`
+	Category          string     `json:"category"`
+	Url               string     `json:"url"`
+	PdfUrl            string     `json:"pdfUrl"`
+	Password          string     `json:"password"`
+	EInvoicingID      *string    `json:"eInvoicingId"`
+	EInvoicingStatus  *string    `json:"eInvoicingStatus"`
+	PaymentType       *string    `json:"paymentType"`
+	PaymentIdentifier *string    `json:"paymentIdentifier"`
+	PaymentDate       *time.Time `json:"paymentDate"`
 }
 
 func tableOvhDepositPaidBill() *plugin.Table {
 	return &plugin.Table{
 		Name:        "ovh_deposit_paid_bill",
-		Description: "Paid bills associated with deposits.",
+		Description: "Paid bills associated with deposits. Supports querying by deposit_id or deposit_date (or both).",
 		List: &plugin.ListConfig{
-			KeyColumns: plugin.AllColumns([]string{"deposit_id"}),
-			Hydrate:    listDepositPaidBills,
+			KeyColumns: plugin.KeyColumnSlice{
+				{Name: "deposit_id", Operators: []string{"="}, Require: plugin.Optional},
+				{Name: "deposit_date", Operators: []string{">", ">=", "=", "<", "<="}, Require: plugin.Optional},
+			},
+			Hydrate: listDepositPaidBills,
 		},
 		Get: &plugin.GetConfig{
 			KeyColumns: plugin.AllColumns([]string{"deposit_id", "bill_id"}),
@@ -48,8 +54,14 @@ func tableOvhDepositPaidBill() *plugin.Table {
 			{
 				Name:        "deposit_id",
 				Type:        proto.ColumnType_STRING,
-				Transform:   transform.FromQual("deposit_id"),
+				Transform:   transform.FromField("DepositID"),
 				Description: "ID of the deposit.",
+			},
+			{
+				Name:        "deposit_date",
+				Type:        proto.ColumnType_TIMESTAMP,
+				Transform:   transform.FromField("DepositDate"),
+				Description: "Date of the deposit (for easy filtering).",
 			},
 			{
 				Name:        "bill_id",
@@ -218,23 +230,123 @@ func listDepositPaidBills(ctx context.Context, d *plugin.QueryData, _ *plugin.Hy
 
 	depositID := d.EqualsQuals["deposit_id"].GetStringValue()
 
-	// First, get list of paid bill IDs for this deposit
-	var billIDs []string
-	err = client.Get(fmt.Sprintf("/me/deposit/%s/paidBills", depositID), &billIDs)
+	// Path A: Fast path - if deposit_id is provided
+	if depositID != "" {
+		// Fetch deposit info to get the date
+		var deposit Deposit
+		err = client.Get(fmt.Sprintf("/me/deposit/%s", depositID), &deposit)
+		if err != nil {
+			plugin.Logger(ctx).Error("ovh_deposit_paid_bill.listDepositPaidBills", "fetch_deposit_error", err)
+			return nil, err
+		}
 
+		var billIDs []string
+		err = client.Get(fmt.Sprintf("/me/deposit/%s/paidBills", depositID), &billIDs)
+
+		if err != nil {
+			plugin.Logger(ctx).Error("ovh_deposit_paid_bill.listDepositPaidBills", "fetch_bills_error", err)
+			return nil, err
+		}
+
+		for _, billID := range billIDs {
+			var bill DepositPaidBill
+			bill.DepositID = depositID
+			bill.DepositDate = deposit.Date
+			bill.BillID = billID
+			d.StreamListItem(ctx, bill)
+		}
+
+		return nil, nil
+	}
+
+	// Path B: Smart path - enumerate all deposits (optionally filtered by date)
+	deposits, err := enumerateDeposits(ctx, d, client)
 	if err != nil {
-		plugin.Logger(ctx).Error("ovh_deposit_paid_bill.listDepositPaidBills", err)
+		plugin.Logger(ctx).Error("ovh_deposit_paid_bill.listDepositPaidBills", "enumerate_deposits_error", err)
 		return nil, err
 	}
 
-	for _, billID := range billIDs {
-		var bill DepositPaidBill
-		bill.DepositID = depositID
-		bill.BillID = billID
-		d.StreamListItem(ctx, bill)
+	// For each deposit, fetch its paid bills
+	for _, deposit := range deposits {
+		var billIDs []string
+		err = client.Get(fmt.Sprintf("/me/deposit/%s/paidBills", deposit.DepositID), &billIDs)
+
+		if err != nil {
+			plugin.Logger(ctx).Debug("ovh_deposit_paid_bill.listDepositPaidBills", "fetch_bills_error", fmt.Sprintf("deposit %s: %v", deposit.DepositID, err))
+			continue // Skip this deposit and continue with next
+		}
+
+		// Stream each bill with its deposit date
+		for _, billID := range billIDs {
+			var bill DepositPaidBill
+			bill.DepositID = deposit.DepositID
+			bill.DepositDate = deposit.Date
+			bill.BillID = billID
+			d.StreamListItem(ctx, bill)
+		}
 	}
 
 	return nil, nil
+}
+
+// enumerateDeposits fetches all deposits, optionally filtered by date range
+func enumerateDeposits(ctx context.Context, d *plugin.QueryData, client *ovhapi.Client) ([]Deposit, error) {
+	// Build query parameters for date filtering
+	params := url.Values{}
+
+	// Handle deposit_date filtering
+	if d.Quals["deposit_date"] != nil {
+		for _, qual := range d.Quals["deposit_date"].Quals {
+			if qual.Value != nil {
+				dateValue := qual.Value.GetTimestampValue().AsTime().Format(time.RFC3339)
+				switch qual.Operator {
+				case ">=":
+					params.Add("date.from", dateValue)
+				case ">":
+					dateValue = qual.Value.GetTimestampValue().AsTime().Add(time.Second).Format(time.RFC3339)
+					params.Add("date.from", dateValue)
+				case "<=":
+					params.Add("date.to", dateValue)
+				case "<":
+					dateValue = qual.Value.GetTimestampValue().AsTime().Add(-time.Second).Format(time.RFC3339)
+					params.Add("date.to", dateValue)
+				case "=":
+					params.Add("date.from", dateValue)
+					params.Add("date.to", dateValue)
+				}
+			}
+		}
+	}
+
+	// Build the URL with query parameters
+	depositURL := "/me/deposit"
+	if len(params) > 0 {
+		depositURL = depositURL + "?" + params.Encode()
+	}
+
+	var depositsID []string
+	err := client.Get(depositURL, &depositsID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Fetch full deposit details for each ID
+	deposits := make([]Deposit, 0, len(depositsID))
+	for _, depositID := range depositsID {
+		var deposit Deposit
+		deposit.DepositID = depositID
+
+		// Fetch full deposit info
+		err = client.Get(fmt.Sprintf("/me/deposit/%s", depositID), &deposit)
+		if err != nil {
+			plugin.Logger(ctx).Debug("ovh_deposit_paid_bill.enumerateDeposits", "fetch_deposit_error", fmt.Sprintf("deposit %s: %v", depositID, err))
+			continue // Skip deposits that fail to fetch
+		}
+
+		deposits = append(deposits, deposit)
+	}
+
+	return deposits, nil
 }
 
 func getDepositPaidBill(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
