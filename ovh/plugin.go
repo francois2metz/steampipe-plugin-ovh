@@ -36,6 +36,8 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 			"ovh_cloud_volume":            tableOvhCloudVolume(),
 			"ovh_cloud_volume_snapshot":   tableOvhCloudVolumeSnapshot(),
 			"ovh_dedicated_server":        tableOvhDedicatedServer(ctx),
+			"ovh_deposit":                 tableOvhDeposit(),
+			"ovh_deposit_paid_bill":       tableOvhDepositPaidBill(),
 			"ovh_iam_resource":            tableOvhIamResource(),
 			"ovh_log_self":                tableOvhLog(),
 			"ovh_refund":                  tableOvhRefund(),
