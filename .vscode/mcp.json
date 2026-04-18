@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "steampipe": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@turbot/steampipe-mcp",
+        "postgresql://steampipe@localhost:9193/steampipe"
+      ]
+    }
+  }
+}
