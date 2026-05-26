@@ -1,8 +1,8 @@
 package ovh
 
 import (
-	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/schema"
+	"github.com/turbot/steampipe-plugin-sdk/v6/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v6/plugin/schema"
 )
 
 type ovhConfig struct {
@@ -33,9 +33,9 @@ func ConfigInstance() interface{} {
 
 // GetConfig :: retrieve and cast connection config from query data
 func GetConfig(connection *plugin.Connection) ovhConfig {
-	if connection == nil || connection.Config == nil {
+	if connection == nil || connection.GetConfig() == nil {
 		return ovhConfig{}
 	}
-	config, _ := connection.Config.(ovhConfig)
+	config, _ := connection.GetConfig().(ovhConfig)
 	return config
 }
