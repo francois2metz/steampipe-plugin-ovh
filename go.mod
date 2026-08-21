@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/ovh/go-ovh v1.9.0
-	github.com/turbot/steampipe-plugin-sdk/v6 v6.0.0
+	github.com/turbot/steampipe-plugin-sdk/v6 v6.1.0
 )
 
 require (
