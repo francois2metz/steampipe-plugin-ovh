@@ -1,0 +1,1 @@
+{"name":"RBX","continentCode":"EU","datacenterLocation":"RBX","status":"UP","type":"region","services":[{"name":"storage-s3-standard","status":"UP","endpoint":"https://s3.rbx.io.cloud.ovh.net/"},{"name":"storage-s3-high-perf","status":"UP","endpoint":"https://s3.rbx.perf.cloud.ovh.net/"}],"ipCountries":[],"countryCode":"fr","availabilityZones":[]}
