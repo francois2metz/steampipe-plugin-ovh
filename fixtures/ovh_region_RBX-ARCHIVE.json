@@ -1,0 +1,1 @@
+{"name":"RBX-ARCHIVE","continentCode":"EU","datacenterLocation":"RBX","status":"UP","type":"region","services":[{"name":"storage-s3-coldarchive","status":"UP","endpoint":"https://s3.rbx-archive.io.cloud.ovh.net/"}],"ipCountries":[],"countryCode":"fr","availabilityZones":[]}
