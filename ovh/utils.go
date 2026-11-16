@@ -11,7 +11,7 @@ import (
 func connect(ctx context.Context, d *plugin.QueryData) (*ovh.Client, error) {
 	// get ovh client from cache
 	cacheKey := "ovh"
-	if cachedData, ok := d.ConnectionManager.Cache.Get(cacheKey); ok {
+	if cachedData, ok := d.ConnectionCache.Get(ctx, cacheKey); ok {
 		return cachedData.(*ovh.Client), nil
 	}
 
@@ -56,7 +56,10 @@ func connect(ctx context.Context, d *plugin.QueryData) (*ovh.Client, error) {
 	)
 
 	// Save to cache
-	d.ConnectionManager.Cache.Set(cacheKey, client)
+	err := d.ConnectionCache.Set(ctx, cacheKey, client)
+	if err != nil {
+		return nil, err
+	}
 
 	return client, nil
 }
